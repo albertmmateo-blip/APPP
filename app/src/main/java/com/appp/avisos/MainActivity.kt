@@ -76,8 +76,8 @@ class MainActivity : AppCompatActivity() {
                 .setIcon(R.drawable.ic_note)
         )
         
-        // Set default selected tab (show all notes initially)
-        binding.tabLayout.getTabAt(0)?.select()
+        // Don't select any tab initially - this will show all notes
+        // Tab selection will be handled by user interaction
     }
     
     /**

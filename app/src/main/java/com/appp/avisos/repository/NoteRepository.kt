@@ -3,13 +3,11 @@ package com.appp.avisos.repository
 import androidx.lifecycle.LiveData
 import com.appp.avisos.database.Note
 import com.appp.avisos.database.NoteDao
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /**
  * Repository that provides a clean API for data access to the rest of the application.
- * This class abstracts the data sources (in this case, Room database) and handles
- * background thread operations.
+ * This class abstracts the data sources (in this case, Room database).
+ * Room's suspend functions are main-safe and handle threading automatically.
  */
 class NoteRepository(private val noteDao: NoteDao) {
     
@@ -31,38 +29,32 @@ class NoteRepository(private val noteDao: NoteDao) {
     
     /**
      * Insert a new note into the database.
-     * Runs on IO dispatcher for background execution.
+     * Room automatically handles background execution for suspend functions.
      * 
      * @param note The note to insert
      * @return The ID of the newly inserted note
      */
     suspend fun insertNote(note: Note): Long {
-        return withContext(Dispatchers.IO) {
-            noteDao.insertNote(note)
-        }
+        return noteDao.insertNote(note)
     }
     
     /**
      * Update an existing note in the database.
-     * Runs on IO dispatcher for background execution.
+     * Room automatically handles background execution for suspend functions.
      * 
      * @param note The note to update
      */
     suspend fun updateNote(note: Note) {
-        withContext(Dispatchers.IO) {
-            noteDao.updateNote(note)
-        }
+        noteDao.updateNote(note)
     }
     
     /**
      * Delete a note from the database.
-     * Runs on IO dispatcher for background execution.
+     * Room automatically handles background execution for suspend functions.
      * 
      * @param note The note to delete
      */
     suspend fun deleteNote(note: Note) {
-        withContext(Dispatchers.IO) {
-            noteDao.deleteNote(note)
-        }
+        noteDao.deleteNote(note)
     }
 }

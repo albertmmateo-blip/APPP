@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import com.appp.avisos.database.AppDatabase
 import com.appp.avisos.database.Note
 import com.appp.avisos.repository.NoteRepository
@@ -22,7 +22,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     
     /**
      * LiveData of notes that automatically updates when the selected category changes.
-     * Uses Transformations.switchMap to switch between different LiveData sources
+     * Uses switchMap extension function to switch between different LiveData sources
      * based on the selected category.
      */
     val notes: LiveData<List<Note>>
@@ -33,7 +33,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         repository = NoteRepository(noteDao)
         
         // Set up transformation to switch between all notes and filtered notes
-        notes = Transformations.switchMap(_selectedCategory) { category ->
+        notes = _selectedCategory.switchMap { category ->
             if (category == null) {
                 // No category selected - show all notes
                 repository.getAllNotes()
