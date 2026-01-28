@@ -4,7 +4,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     
-    <!-- Primary colors - Pleasant blue/teal for app bar -->
+    <!-- Primary colors - Teal primary color for app bar and primary UI elements -->
     <color name="primary">#FF009688</color>           <!-- Teal 500 -->
     <color name="primary_variant">#FF00796B</color>   <!-- Teal 700 - Darker shade -->
     <color name="primary_light">#FF4DB6AC</color>     <!-- Teal 300 - Lighter shade -->
