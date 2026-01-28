@@ -2,12 +2,16 @@
 <resources>
     <!-- App name -->
     <string name="app_name">Appp Avisos</string>
+    <string name="app_title">Entretelas</string>
     
     <!-- Category names -->
     <string name="category_trucar">Trucar</string>
     <string name="category_encarregar">Encarregar</string>
     <string name="category_factures">Factures</string>
     <string name="category_notes">Notes</string>
+    
+    <!-- Content descriptions -->
+    <string name="fab_add_note">Add new note</string>
     
     <!-- Form labels -->
     <string name="label_note_name">Note Name</string>
