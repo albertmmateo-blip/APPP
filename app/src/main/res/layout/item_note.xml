@@ -8,8 +8,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="8dp"
-    app:cardElevation="2dp"
+    app:cardElevation="4dp"
     app:strokeWidth="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,10 +25,11 @@
             android:id="@+id/textNoteName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceHeadlineSmall"
-            android:textColor="?attr/colorOnSurface"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,27 +41,54 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
             android:ellipsize="end"
-            android:maxLines="2"
+            android:maxLines="3"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textNoteName"
-            tools:text="Note body content preview goes here..." />
+            tools:text="Note body content preview goes here. This can span multiple lines up to three lines maximum..." />
 
-        <!-- Note metadata (category and date) -->
+        <!-- Contact info icon -->
+        <ImageView
+            android:id="@+id/iconContact"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/label_contact"
+            android:src="@drawable/ic_contact_mail"
+            app:tint="?attr/colorOnSurfaceVariant"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textNoteBody" />
+
+        <!-- Contact info text -->
         <TextView
-            android:id="@+id/textNoteMetadata"
+            android:id="@+id/textContactInfo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:layout_marginStart="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iconContact"
+            app:layout_constraintEnd_toStartOf="@id/textModifiedDate"
+            app:layout_constraintStart_toEndOf="@id/iconContact"
+            app:layout_constraintTop_toTopOf="@id/iconContact"
+            tools:text="contact@email.com" />
+
+        <!-- Modified date -->
+        <TextView
+            android:id="@+id/textModifiedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iconContact"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textNoteBody"
-            tools:text="Trucar • 2 days ago" />
+            app:layout_constraintTop_toTopOf="@id/iconContact"
+            tools:text="2 days ago" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
