@@ -21,13 +21,19 @@
 
 ## Documentation
 
+### For Users
 📖 **[User Guide](USER_GUIDE.md)** - Learn how to use all features of Appp Avisos
+
+### For Developers
+🚀 **[Getting Started](GETTING_STARTED.md)** - **START HERE** to begin implementation
 
 👨‍💻 **[Implementation Guide](IMPLEMENTATION_GUIDE.md)** - Comprehensive prompts to implement this app
 
 🪟 **[Windows Quick Start](WINDOWS_QUICK_START.md)** - Set up Android development on Windows
 
 📋 **[Prompts Cheat Sheet](PROMPTS_CHEAT_SHEET.md)** - Quick reference for all implementation prompts
+
+📊 **[Implementation Progress](IMPLEMENTATION_PROGRESS.md)** - Track your progress with checklists
 
 ## Quick Start
 
@@ -42,7 +48,9 @@ Your note is now saved and will appear in the selected category!
 
 ⚠️ **This app is currently in the planning/documentation phase.**
 
-The implementation guides are ready! Follow the comprehensive prompts in the [Implementation Guide](IMPLEMENTATION_GUIDE.md) to build this app from scratch.
+🚀 **Ready to implement?** Start with the **[Getting Started Guide](GETTING_STARTED.md)**!
+
+The comprehensive implementation guides are ready to help you build this app from scratch.
 
 ## Requirements
 
