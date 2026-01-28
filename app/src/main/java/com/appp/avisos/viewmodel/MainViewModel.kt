@@ -25,7 +25,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * Uses MediatorLiveData for reactive filtering by observing both the category
      * and the appropriate notes source.
      */
-    val notes: LiveData<List<Note>> = MediatorLiveData()
+    private val _notes: MediatorLiveData<List<Note>> = MediatorLiveData()
+    val notes: LiveData<List<Note>> = _notes
     
     // Keep track of currently observed LiveData source
     private var currentNotesSource: LiveData<List<Note>>? = null
@@ -37,13 +38,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         repository = NoteRepository(noteDao)
         
         // Set up MediatorLiveData to react to category changes
-        (notes as MediatorLiveData).addSource(_selectedCategory) { category ->
+        _notes.addSource(_selectedCategory) { category ->
             // Only update if category actually changed
             if (currentCategory != category) {
                 currentCategory = category
                 
                 // Remove previous source if it exists
-                currentNotesSource?.let { (notes as MediatorLiveData).removeSource(it) }
+                currentNotesSource?.let { _notes.removeSource(it) }
                 
                 // Determine which notes source to observe based on the category
                 val newSource = if (category == null) {
@@ -56,8 +57,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 
                 // Add the new source and update currentNotesSource
                 currentNotesSource = newSource
-                (notes as MediatorLiveData).addSource(newSource) { notesList ->
-                    (notes as MediatorLiveData).value = notesList
+                _notes.addSource(newSource) { notesList ->
+                    _notes.value = notesList
                 }
             }
         }
