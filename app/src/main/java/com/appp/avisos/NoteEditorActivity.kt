@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.appp.avisos.databinding.ActivityNoteEditorBinding
 import com.appp.avisos.viewmodel.NoteEditorViewModel
@@ -168,9 +169,9 @@ class NoteEditorActivity : AppCompatActivity() {
             .setNegativeButton(R.string.button_cancel, null)
             .show()
             .apply {
-                // Make the positive (DELETE) button red
+                // Make the positive (DELETE) button red using theme's error color
                 getButton(android.content.DialogInterface.BUTTON_POSITIVE)
-                    ?.setTextColor(getColor(com.google.android.material.R.color.design_default_color_error))
+                    ?.setTextColor(ContextCompat.getColor(context, R.color.error))
             }
     }
     

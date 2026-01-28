@@ -31,7 +31,7 @@
     
     <!-- Dialog messages -->
     <string name="dialog_delete_title">Delete Note?</string>
-    <string name="dialog_delete_message">This action cannot be undone</string>
+    <string name="dialog_delete_message">This action cannot be undone.</string>
     
     <!-- Success messages -->
     <string name="message_note_saved">Note saved successfully</string>
