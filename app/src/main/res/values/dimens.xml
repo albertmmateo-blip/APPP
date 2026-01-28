@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spacing for RecyclerView to accommodate FAB (56dp FAB + 32dp margin) -->
+    <dimen name="recycler_view_fab_padding">88dp</dimen>
+</resources>

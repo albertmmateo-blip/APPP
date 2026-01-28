@@ -10,12 +10,6 @@
     <string name="category_factures">Factures</string>
     <string name="category_notes">Notes</string>
     
-    <!-- Tab labels -->
-    <string name="tab_trucar">Trucar</string>
-    <string name="tab_encarregar">Encarregar</string>
-    <string name="tab_factures">Factures</string>
-    <string name="tab_notes">Notes</string>
-    
     <!-- Content descriptions -->
     <string name="fab_add_note">Add new note</string>
     

@@ -26,8 +26,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
             app:title="@string/app_title"
             app:titleTextColor="@color/text_on_primary" />
 
@@ -38,13 +36,8 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
             app:tabMode="scrollable"
-            app:tabIndicatorColor="@color/secondary"
             app:tabIndicatorHeight="3dp"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/text_on_primary"
-            app:tabIconTint="@color/text_on_primary"
             app:tabInlineLabel="false" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -64,7 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipToPadding="false"
-            android:paddingBottom="88dp"
+            android:paddingBottom="@dimen/recycler_view_fab_padding"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -86,7 +79,6 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/fab_add_note"
         app:fabSize="normal"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:tint="@color/text_on_secondary" />
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
