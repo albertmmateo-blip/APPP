@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 /**
  * Room Database for the APPP Avisos application.
- * 
+ *
  * This is a singleton database class that provides access to the Note entity
  * and its corresponding DAO.
  */
