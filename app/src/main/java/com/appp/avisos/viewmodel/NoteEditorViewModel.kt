@@ -124,8 +124,12 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                 
                 if (existingNote != null) {
                     repository.updateNote(note)
+                    _currentNote.value = note
                 } else {
-                    repository.insertNote(note)
+                    // Insert and capture the returned ID
+                    val insertedId = repository.insertNote(note)
+                    // Update the current note with the actual database ID
+                    _currentNote.value = note.copy(id = insertedId.toInt())
                 }
                 
                 onSuccess()

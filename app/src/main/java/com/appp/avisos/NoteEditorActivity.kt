@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.appp.avisos.database.Note
 import com.appp.avisos.databinding.ActivityNoteEditorBinding
 import com.appp.avisos.viewmodel.NoteEditorViewModel
 
@@ -21,9 +20,6 @@ class NoteEditorActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityNoteEditorBinding
     private val viewModel: NoteEditorViewModel by viewModels()
-    
-    // Note being edited (null for new notes)
-    private var editingNote: Note? = null
     
     // Categories for spinner
     private val categories = arrayOf("Trucar", "Encarregar", "Factures", "Notes")
@@ -77,8 +73,6 @@ class NoteEditorActivity : AppCompatActivity() {
             viewModel.loadNote(
                 id = noteId,
                 onSuccess = { note ->
-                    editingNote = note
-                    
                     // Populate fields
                     binding.editTextNoteName.setText(note.name)
                     binding.editTextNoteBody.setText(note.body)
