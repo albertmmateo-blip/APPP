@@ -73,37 +73,31 @@ class NoteEditorActivity : AppCompatActivity() {
         val noteId = intent.getIntExtra(EXTRA_NOTE_ID, 0)
         
         if (noteId != 0) {
-            // EDIT mode - load existing note
-            val name = intent.getStringExtra(EXTRA_NOTE_NAME) ?: ""
-            val body = intent.getStringExtra(EXTRA_NOTE_BODY) ?: ""
-            val contact = intent.getStringExtra(EXTRA_NOTE_CONTACT)
-            val category = intent.getStringExtra(EXTRA_NOTE_CATEGORY) ?: categories[0]
-            val createdDate = intent.getLongExtra(EXTRA_NOTE_CREATED_DATE, System.currentTimeMillis())
-            val modifiedDate = intent.getLongExtra(EXTRA_NOTE_MODIFIED_DATE, System.currentTimeMillis())
-            
-            editingNote = Note(
+            // EDIT mode - load note from database via ViewModel
+            viewModel.loadNote(
                 id = noteId,
-                name = name,
-                body = body,
-                contact = contact,
-                category = category,
-                createdDate = createdDate,
-                modifiedDate = modifiedDate
+                onSuccess = { note ->
+                    editingNote = note
+                    
+                    // Populate fields
+                    binding.editTextNoteName.setText(note.name)
+                    binding.editTextNoteBody.setText(note.body)
+                    binding.editTextContact.setText(note.contact)
+                    
+                    // Set category in spinner
+                    val categoryIndex = categories.indexOf(note.category)
+                    if (categoryIndex >= 0) {
+                        binding.spinnerCategory.setSelection(categoryIndex)
+                    }
+                    
+                    // Show delete button for existing notes
+                    binding.buttonDelete.visibility = View.VISIBLE
+                },
+                onError = { error ->
+                    Toast.makeText(this, "Error loading note: $error", Toast.LENGTH_LONG).show()
+                    finish()
+                }
             )
-            
-            // Populate fields
-            binding.editTextNoteName.setText(name)
-            binding.editTextNoteBody.setText(body)
-            binding.editTextContact.setText(contact)
-            
-            // Set category in spinner
-            val categoryIndex = categories.indexOf(category)
-            if (categoryIndex >= 0) {
-                binding.spinnerCategory.setSelection(categoryIndex)
-            }
-            
-            // Show delete button for existing notes
-            binding.buttonDelete.visibility = View.VISIBLE
         } else {
             // CREATE mode - hide delete button
             binding.buttonDelete.visibility = View.GONE
@@ -131,64 +125,38 @@ class NoteEditorActivity : AppCompatActivity() {
      * Validate and save the note
      */
     private fun saveNote() {
-        val name = binding.editTextNoteName.text.toString().trim()
-        val body = binding.editTextNoteBody.text.toString().trim()
-        val contact = binding.editTextContact.text.toString().trim()
+        val name = binding.editTextNoteName.text.toString()
+        val body = binding.editTextNoteBody.text.toString()
+        val contact = binding.editTextContact.text.toString()
         val category = binding.spinnerCategory.selectedItem.toString()
         
-        // Validate required fields
-        var isValid = true
+        // Clear previous errors
+        binding.textInputLayoutNoteName.error = null
+        binding.textInputLayoutNoteBody.error = null
         
-        if (name.isEmpty()) {
-            binding.textInputLayoutNoteName.error = getString(R.string.error_empty_name)
-            isValid = false
-        } else {
-            binding.textInputLayoutNoteName.error = null
-        }
-        
-        if (body.isEmpty()) {
-            binding.textInputLayoutNoteBody.error = getString(R.string.error_empty_body)
-            isValid = false
-        } else {
-            binding.textInputLayoutNoteBody.error = null
-        }
-        
-        if (!isValid) {
-            return
-        }
-        
-        // Create or update note
-        val currentTime = System.currentTimeMillis()
-        val note = if (editingNote != null) {
-            // Update existing note
-            editingNote!!.copy(
-                name = name,
-                body = body,
-                contact = contact.ifEmpty { null },
-                category = category,
-                modifiedDate = currentTime
-            )
-        } else {
-            // Create new note
-            Note(
-                name = name,
-                body = body,
-                contact = contact.ifEmpty { null },
-                category = category,
-                createdDate = currentTime,
-                modifiedDate = currentTime
-            )
-        }
-        
-        // Save via ViewModel
+        // Save via ViewModel (validation happens in ViewModel)
         viewModel.saveNote(
-            note = note,
+            name = name,
+            body = body,
+            contact = contact,
+            category = category,
             onSuccess = {
                 Toast.makeText(this, R.string.message_note_saved, Toast.LENGTH_SHORT).show()
                 finish()
             },
             onError = { error ->
-                Toast.makeText(this, getString(R.string.error_save_failed) + ": $error", Toast.LENGTH_LONG).show()
+                // Handle validation errors
+                when {
+                    error.contains("Name") -> {
+                        binding.textInputLayoutNoteName.error = error
+                    }
+                    error.contains("Body") -> {
+                        binding.textInputLayoutNoteBody.error = error
+                    }
+                    else -> {
+                        Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+                    }
+                }
             }
         )
     }
@@ -211,17 +179,14 @@ class NoteEditorActivity : AppCompatActivity() {
      * Delete the current note
      */
     private fun deleteNote() {
-        editingNote?.let { note ->
-            viewModel.deleteNote(
-                note = note,
-                onSuccess = {
-                    Toast.makeText(this, R.string.message_note_deleted, Toast.LENGTH_SHORT).show()
-                    finish()
-                },
-                onError = { error ->
-                    Toast.makeText(this, getString(R.string.error_delete_failed) + ": $error", Toast.LENGTH_LONG).show()
-                }
-            )
-        }
+        viewModel.deleteNote(
+            onSuccess = {
+                Toast.makeText(this, R.string.message_note_deleted, Toast.LENGTH_SHORT).show()
+                finish()
+            },
+            onError = { error ->
+                Toast.makeText(this, getString(R.string.error_delete_failed) + ": $error", Toast.LENGTH_LONG).show()
+            }
+        )
     }
 }

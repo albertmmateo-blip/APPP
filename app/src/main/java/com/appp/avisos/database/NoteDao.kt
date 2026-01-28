@@ -38,4 +38,10 @@ interface NoteDao {
      */
     @Query("SELECT * FROM notes WHERE category = :category ORDER BY modified_date DESC")
     fun getNotesByCategory(category: String): LiveData<List<Note>>
+    
+    /**
+     * Get a single note by its ID
+     */
+    @Query("SELECT * FROM notes WHERE id = :noteId")
+    suspend fun getNoteById(noteId: Int): Note?
 }

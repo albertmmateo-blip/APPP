@@ -57,4 +57,15 @@ class NoteRepository(private val noteDao: NoteDao) {
     suspend fun deleteNote(note: Note) {
         noteDao.deleteNote(note)
     }
+    
+    /**
+     * Get a single note by its ID.
+     * Room automatically handles background execution for suspend functions.
+     * 
+     * @param noteId The ID of the note to retrieve
+     * @return The note if found, null otherwise
+     */
+    suspend fun getNoteById(noteId: Int): Note? {
+        return noteDao.getNoteById(noteId)
+    }
 }
