@@ -5,8 +5,9 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.appp.avisos.databinding.ActivityNoteEditorBinding
 import com.appp.avisos.viewmodel.NoteEditorViewModel
 
@@ -159,7 +160,7 @@ class NoteEditorActivity : AppCompatActivity() {
      * Show confirmation dialog before deleting note
      */
     private fun showDeleteConfirmationDialog() {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle(R.string.dialog_delete_title)
             .setMessage(R.string.dialog_delete_message)
             .setPositiveButton(R.string.button_delete) { _, _ ->
@@ -167,6 +168,11 @@ class NoteEditorActivity : AppCompatActivity() {
             }
             .setNegativeButton(R.string.button_cancel, null)
             .show()
+            .apply {
+                // Make the positive (DELETE) button red using theme's error color
+                getButton(android.content.DialogInterface.BUTTON_POSITIVE)
+                    ?.setTextColor(ContextCompat.getColor(context, R.color.error))
+            }
     }
     
     /**
