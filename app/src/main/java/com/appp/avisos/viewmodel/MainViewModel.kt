@@ -25,10 +25,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * Uses MediatorLiveData for reactive filtering by observing both the category
      * and the appropriate notes source.
      */
-    val notes: MediatorLiveData<List<Note>> = MediatorLiveData()
+    val notes: LiveData<List<Note>> = MediatorLiveData()
     
     // Keep track of currently observed LiveData source
     private var currentNotesSource: LiveData<List<Note>>? = null
+    private var currentCategory: String? = null
     
     init {
         // Initialize repository with database instance
@@ -36,23 +37,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         repository = NoteRepository(noteDao)
         
         // Set up MediatorLiveData to react to category changes
-        notes.addSource(_selectedCategory) { category ->
-            // Remove previous source if it exists
-            currentNotesSource?.let { notes.removeSource(it) }
-            
-            // Determine which notes source to observe based on the category
-            val newSource = if (category == null) {
-                // No category selected - show all notes
-                repository.getAllNotes()
-            } else {
-                // Category selected - show filtered notes
-                repository.getNotesByCategory(category)
-            }
-            
-            // Add the new source and update currentNotesSource
-            currentNotesSource = newSource
-            notes.addSource(newSource) { notesList ->
-                notes.value = notesList
+        (notes as MediatorLiveData).addSource(_selectedCategory) { category ->
+            // Only update if category actually changed
+            if (currentCategory != category) {
+                currentCategory = category
+                
+                // Remove previous source if it exists
+                currentNotesSource?.let { (notes as MediatorLiveData).removeSource(it) }
+                
+                // Determine which notes source to observe based on the category
+                val newSource = if (category == null) {
+                    // No category selected - show all notes
+                    repository.getAllNotes()
+                } else {
+                    // Category selected - show filtered notes
+                    repository.getNotesByCategory(category)
+                }
+                
+                // Add the new source and update currentNotesSource
+                currentNotesSource = newSource
+                (notes as MediatorLiveData).addSource(newSource) { notesList ->
+                    (notes as MediatorLiveData).value = notesList
+                }
             }
         }
         
