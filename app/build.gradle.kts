@@ -59,8 +59,8 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
     
     // Lifecycle components
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     
     // Testing
     testImplementation("junit:junit:4.13.2")

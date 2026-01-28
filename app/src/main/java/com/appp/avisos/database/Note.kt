@@ -19,12 +19,12 @@ data class Note(
     @ColumnInfo(name = "contact")
     val contact: String? = null,
     
-    @ColumnInfo(name = "category")
+    @ColumnInfo(name = "category", index = true)
     val category: String,
     
     @ColumnInfo(name = "created_date")
     val createdDate: Long,
     
-    @ColumnInfo(name = "modified_date")
+    @ColumnInfo(name = "modified_date", index = true)
     val modifiedDate: Long
 )
