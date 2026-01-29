@@ -38,7 +38,10 @@
             android:layout_height="wrap_content"
             app:tabMode="scrollable"
             app:tabIndicatorHeight="3dp"
-            app:tabInlineLabel="false" />
+            app:tabInlineLabel="false"
+            app:tabSelectedTextColor="@color/secondary"
+            app:tabTextColor="@color/text_on_primary"
+            app:tabIndicatorColor="@color/secondary" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -79,6 +82,8 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/fab_add_note"
         app:fabSize="normal"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/secondary"
+        app:tint="@color/text_on_secondary" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
