@@ -82,6 +82,7 @@ class UserSelectionActivity : AppCompatActivity() {
                 val enteredPassword = passwordInput.text.toString()
                 if (sessionManager.validateFacturesPassword(enteredPassword)) {
                     // Password correct - proceed to login
+                    dialog.dismiss()
                     proceedToMainActivity("Pedro")
                 } else {
                     // Password incorrect - show error
@@ -91,7 +92,6 @@ class UserSelectionActivity : AppCompatActivity() {
                         .setPositiveButton("D'acord", null)
                         .show()
                 }
-                dialog.dismiss()
             }
             .setNegativeButton("Cancel·lar") { dialog, _ ->
                 dialog.dismiss()

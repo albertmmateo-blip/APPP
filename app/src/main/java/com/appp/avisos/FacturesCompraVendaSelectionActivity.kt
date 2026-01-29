@@ -23,6 +23,13 @@ class FacturesCompraVendaSelectionActivity : AppCompatActivity() {
         // Get parent subcategory from intent (Passades or Per passar)
         parentSubcategory = intent.getStringExtra(EXTRA_PARENT_SUBCATEGORY)
         
+        // Validate parent subcategory
+        if (parentSubcategory == null) {
+            // Invalid state - finish activity
+            finish()
+            return
+        }
+        
         // Set up toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

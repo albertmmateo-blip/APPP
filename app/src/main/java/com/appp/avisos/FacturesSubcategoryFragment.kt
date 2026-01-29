@@ -61,7 +61,7 @@ class FacturesSubcategoryFragment : Fragment() {
      */
     private fun openCompraVendaSelection(parentSubcategory: String) {
         val intent = Intent(requireContext(), FacturesCompraVendaSelectionActivity::class.java)
-        intent.putExtra("parent_subcategory", parentSubcategory)
+        intent.putExtra(FacturesCompraVendaSelectionActivity.EXTRA_PARENT_SUBCATEGORY, parentSubcategory)
         startActivity(intent)
     }
     
