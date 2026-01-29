@@ -44,7 +44,7 @@ class EditHistoryAdapter : ListAdapter<NoteEditHistory, EditHistoryAdapter.EditH
             // Format timestamp and include user if available
             val timestampText = formatDate(history.timestamp)
             val modifiedBy = history.modifiedBy
-            binding.textTimestamp.text = if (modifiedBy != null) {
+            binding.textTimestamp.text = if (!modifiedBy.isNullOrBlank()) {
                 "$timestampText by $modifiedBy"
             } else {
                 timestampText
