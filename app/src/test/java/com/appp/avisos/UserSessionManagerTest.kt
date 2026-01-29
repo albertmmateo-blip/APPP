@@ -102,4 +102,30 @@ class UserSessionManagerTest {
         // Then
         assertFalse(result)
     }
+    
+    @Test
+    fun `validateFacturesPassword returns true for correct password`() {
+        // When
+        val result = sessionManager.validateFacturesPassword("mixo")
+        
+        // Then
+        assertTrue(result)
+    }
+    
+    @Test
+    fun `validateFacturesPassword returns false for incorrect password`() {
+        // When
+        val result = sessionManager.validateFacturesPassword("wrong")
+        
+        // Then
+        assertFalse(result)
+    }
+    
+    @Test
+    fun `validateFacturesPassword is case sensitive`() {
+        // When & Then
+        assertTrue(sessionManager.validateFacturesPassword("mixo"))
+        assertFalse(sessionManager.validateFacturesPassword("MIXO"))
+        assertFalse(sessionManager.validateFacturesPassword("Mixo"))
+    }
 }
