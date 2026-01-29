@@ -1,0 +1,15 @@
+<!-- Icon for Factures Passades (Accounted for invoices) - Checkmark in document -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Document/Receipt background -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M3,22l1.5,-1.5L6,22l1.5,-1.5L9,22l1.5,-1.5L12,22l1.5,-1.5L15,22l1.5,-1.5L18,22l1.5,-1.5L21,22L21,2l-1.5,1.5L18,2l-1.5,1.5L15,2l-1.5,1.5L12,2l-1.5,1.5L9,2,7.5,3.5,6,2,4.5,3.5,3,2v20z"/>
+    <!-- Checkmark -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M9,16.2L5.5,12.7l-1.4,1.4L9,19 19,9l-1.4,-1.4L9,16.2z"/>
+</vector>

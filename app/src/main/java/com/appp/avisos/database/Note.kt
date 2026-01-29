@@ -22,6 +22,9 @@ data class Note(
     @ColumnInfo(name = "category")
     val category: String,
     
+    @ColumnInfo(name = "subcategory")
+    val subcategory: String? = null,  // Subcategory for Factures: Passades, Per passar, Per pagar, Per cobrar
+    
     @ColumnInfo(name = "created_date")
     val createdDate: Long,
     

@@ -1,0 +1,15 @@
+<!-- Icon for Factures Per cobrar (Invoices not yet collected) - Incoming payment arrow -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Document/Receipt background -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M3,22l1.5,-1.5L6,22l1.5,-1.5L9,22l1.5,-1.5L12,22l1.5,-1.5L15,22l1.5,-1.5L18,22l1.5,-1.5L21,22L21,2l-1.5,1.5L18,2l-1.5,1.5L15,2l-1.5,1.5L12,2l-1.5,1.5L9,2,7.5,3.5,6,2,4.5,3.5,3,2v20z"/>
+    <!-- Incoming arrow (pointing left/down) -->
+    <path
+        android:fillColor="#2196F3"
+        android:pathData="M8,11V7l5,5l-5,5v-4H3v-2h5zM15,7h2v10h-2V7z"/>
+</vector>

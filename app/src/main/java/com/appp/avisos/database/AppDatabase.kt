@@ -13,7 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
  * This is a singleton database class that provides access to the Note entity
  * and its corresponding DAO.
  */
-@Database(entities = [Note::class, NoteEditHistory::class], version = 6, exportSchema = false)
+@Database(entities = [Note::class, NoteEditHistory::class], version = 7, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     
     /**
@@ -66,6 +66,16 @@ abstract class AppDatabase : RoomDatabase() {
         }
         
         /**
+         * Migration from version 6 to 7: Add subcategory field for Factures
+         */
+        private val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Add subcategory column to notes table
+                db.execSQL("ALTER TABLE notes ADD COLUMN subcategory TEXT")
+            }
+        }
+        
+        /**
          * Gets the singleton instance of AppDatabase.
          * 
          * @param context Application context
@@ -80,7 +90,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "appp_avisos_db"
                 )
-                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                     .build()
                 
                 INSTANCE = instance

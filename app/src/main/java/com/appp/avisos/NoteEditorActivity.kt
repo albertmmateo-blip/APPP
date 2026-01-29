@@ -161,7 +161,11 @@ class NoteEditorActivity : AppCompatActivity() {
         
         // Get category from current context passed via intent
         val currentCategory = intent.getStringExtra(EXTRA_CURRENT_CATEGORY)
-        val category = currentCategory ?: "Notes" // Default to "Notes" if no context
+        
+        // Parse category and subcategory (format: "Category|Subcategory")
+        val parts = currentCategory?.split("|")
+        val category = parts?.get(0) ?: "Notes" // Default to "Notes" if no context
+        val subcategory = if (parts != null && parts.size > 1) parts[1] else null
         
         // Get current user as author (for new notes only)
         val author = sessionManager.getCurrentUser()
@@ -176,6 +180,7 @@ class NoteEditorActivity : AppCompatActivity() {
             body = body,
             contact = contact,
             category = category,
+            subcategory = subcategory,
             isUrgent = isUrgent,
             author = author,
             onSuccess = {

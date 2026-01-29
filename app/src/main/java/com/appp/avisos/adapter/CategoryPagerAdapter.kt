@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.appp.avisos.CategoryFragment
+import com.appp.avisos.FacturesSubcategoryFragment
 
 /**
  * Adapter for ViewPager2 that displays category fragments
@@ -19,6 +20,11 @@ class CategoryPagerAdapter(
     override fun getItemCount(): Int = categories.size
     
     override fun createFragment(position: Int): Fragment {
-        return CategoryFragment.newInstance(categories[position])
+        // For Factures category (position 2), show subcategory selection for Pedro
+        return if (position == 2) {
+            FacturesSubcategoryFragment.newInstance()
+        } else {
+            CategoryFragment.newInstance(categories[position])
+        }
     }
 }
