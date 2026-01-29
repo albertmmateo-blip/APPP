@@ -38,6 +38,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val facturesCount: LiveData<Int> = repository.getNoteCountByCategory("Factures")
     val notesCount: LiveData<Int> = repository.getNoteCountByCategory("Notes")
     
+    // LiveData for notes by category (for fragments)
+    val trucarNotes: LiveData<List<Note>> = repository.getNotesByCategory("Trucar")
+    val encarregarNotes: LiveData<List<Note>> = repository.getNotesByCategory("Encarregar")
+    val facturesNotes: LiveData<List<Note>> = repository.getNotesByCategory("Factures")
+    val categoryNotes: LiveData<List<Note>> = repository.getNotesByCategory("Notes")
+    
     init {
         // Initialize repository with database instance
         val database = AppDatabase.getInstance(application)

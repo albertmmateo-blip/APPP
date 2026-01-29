@@ -106,17 +106,18 @@ class MainActivity : AppCompatActivity() {
     /**
      * Update badge on a specific tab
      * 
-     * @param position The tab position
-     * @param count The number to display on the badge
+     * @param position The tab position (0-3) corresponding to category index
+     * @param count The number to display on the badge; if 0, badge is removed
      */
     private fun updateTabBadge(position: Int, count: Int) {
-        val tab = binding.tabLayout.getTabAt(position)
+        val tab = binding.tabLayout.getTabAt(position) ?: return
+        
         if (count > 0) {
-            val badge = tab?.orCreateBadge
-            badge?.number = count
-            badge?.isVisible = true
+            val badge = tab.orCreateBadge
+            badge.number = count
+            badge.isVisible = true
         } else {
-            tab?.removeBadge()
+            tab.removeBadge()
         }
     }
     

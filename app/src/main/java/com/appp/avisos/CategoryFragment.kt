@@ -46,6 +46,9 @@ class CategoryFragment : Fragment() {
         observeNotes()
     }
     
+    /**
+     * Configure RecyclerView with NotesAdapter for displaying notes
+     */
     private fun setupRecyclerView() {
         notesAdapter = NotesAdapter { note ->
             openNoteDetail(note)
@@ -56,17 +59,30 @@ class CategoryFragment : Fragment() {
         }
     }
     
+    /**
+     * Observe notes LiveData for this category and update the RecyclerView
+     * Uses dedicated LiveData streams per category to avoid conflicts with other fragments
+     */
     private fun observeNotes() {
-        // Set the selected category in ViewModel
-        viewModel.setSelectedCategory(category)
+        // Observe the correct LiveData based on the category
+        val notesLiveData = when (category) {
+            "Trucar" -> viewModel.trucarNotes
+            "Encarregar" -> viewModel.encarregarNotes
+            "Factures" -> viewModel.facturesNotes
+            "Notes" -> viewModel.categoryNotes
+            else -> viewModel.trucarNotes // Default fallback
+        }
         
-        // Observe filtered notes
-        viewModel.notes.observe(viewLifecycleOwner) { notes ->
+        notesLiveData.observe(viewLifecycleOwner) { notes ->
             notesAdapter.submitList(notes)
             handleEmptyState(notes.isEmpty())
         }
     }
     
+    /**
+     * Show or hide RecyclerView based on whether notes list is empty
+     * @param isEmpty true if the notes list is empty, false otherwise
+     */
     private fun handleEmptyState(isEmpty: Boolean) {
         binding.recyclerViewNotes.visibility = if (isEmpty) View.GONE else View.VISIBLE
         // TODO: Show empty state view when implemented
