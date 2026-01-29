@@ -4,10 +4,10 @@
 
 ## Features
 
-- 📞 **Trucar** - Manage things you need to call about
-- 📦 **Encarregar** - Track items to order or pick up
-- 🧾 **Factures** - Keep track of bills and invoices
-- 📝 **Notes** - Store general notes and reminders
+- 📞 🔵 **Trucar** - Manage things you need to call about
+- 📦 🟢 **Encarregar** - Track items to order or pick up
+- 🧾 🔴 **Factures** - Keep track of bills and invoices
+- 📝 🟣 **Notes** - Store general notes and reminders
 
 ## Key Benefits
 

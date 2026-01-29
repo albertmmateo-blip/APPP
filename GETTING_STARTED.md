@@ -76,7 +76,7 @@ Step 4: Refer to USER_GUIDE.md for feature clarification
 **Appp Avisos** - An offline notes and reminders app with:
 
 ### Features
-- 4 category tabs: Trucar (Calls), Encarregar (Orders), Factures (Bills), Notes (General)
+- 4 category tabs: 🔵 **Trucar** (Calls), 🟢 **Encarregar** (Orders), 🔴 **Factures** (Bills), 🟣 **Notes** (General)
 - Create, read, update, delete notes
 - Each note has: name, body, optional contact, category, timestamps
 - Notes sorted by last modified date
@@ -97,7 +97,7 @@ The implementation is organized into 6 phases:
 ### Phase 1: Project Setup (Week 1)
 - Initialize Android project
 - Configure dependencies
-- Set up colors, themes, and strings
+- Set up colors (🟠 **orange** as main overlay color), themes, and strings
 - **Time:** 2-3 hours
 
 ### Phase 2: Database Implementation (Week 1)
