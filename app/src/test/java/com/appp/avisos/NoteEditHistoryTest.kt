@@ -18,6 +18,7 @@ class NoteEditHistoryTest {
         val newValue = "New Name"
         val timestamp = System.currentTimeMillis()
         val modifiedBy = "TestUser"
+        val editionNumber = 1
         
         // When
         val history = NoteEditHistory(
@@ -26,7 +27,8 @@ class NoteEditHistoryTest {
             oldValue = oldValue,
             newValue = newValue,
             timestamp = timestamp,
-            modifiedBy = modifiedBy
+            modifiedBy = modifiedBy,
+            editionNumber = editionNumber
         )
         
         // Then
@@ -36,6 +38,7 @@ class NoteEditHistoryTest {
         assertEquals(newValue, history.newValue)
         assertEquals(timestamp, history.timestamp)
         assertEquals(modifiedBy, history.modifiedBy)
+        assertEquals(editionNumber, history.editionNumber)
     }
     
     @Test
@@ -114,7 +117,8 @@ class NoteEditHistoryTest {
             oldValue = "Old",
             newValue = "New",
             timestamp = timestamp,
-            modifiedBy = "User1"
+            modifiedBy = "User1",
+            editionNumber = 1
         )
         val history2 = NoteEditHistory(
             id = 1,
@@ -123,7 +127,8 @@ class NoteEditHistoryTest {
             oldValue = "Old",
             newValue = "New",
             timestamp = timestamp,
-            modifiedBy = "User1"
+            modifiedBy = "User1",
+            editionNumber = 1
         )
         
         // Then
@@ -141,7 +146,8 @@ class NoteEditHistoryTest {
             oldValue = "Old",
             newValue = "New",
             timestamp = timestamp,
-            modifiedBy = "User1"
+            modifiedBy = "User1",
+            editionNumber = 1
         )
         val history2 = NoteEditHistory(
             id = 1,
@@ -150,10 +156,56 @@ class NoteEditHistoryTest {
             oldValue = "Old",
             newValue = "New",
             timestamp = timestamp,
-            modifiedBy = "User2"
+            modifiedBy = "User2",
+            editionNumber = 1
         )
         
         // Then
         assertNotEquals(history1, history2)
+    }
+    
+    @Test
+    fun `noteEditHistory with different edition numbers are not equal`() {
+        // Given
+        val timestamp = System.currentTimeMillis()
+        val history1 = NoteEditHistory(
+            id = 1,
+            noteId = 1,
+            fieldName = "Name",
+            oldValue = "Old",
+            newValue = "New",
+            timestamp = timestamp,
+            modifiedBy = "User1",
+            editionNumber = 1
+        )
+        val history2 = NoteEditHistory(
+            id = 1,
+            noteId = 1,
+            fieldName = "Name",
+            oldValue = "Old",
+            newValue = "New",
+            timestamp = timestamp,
+            modifiedBy = "User1",
+            editionNumber = 2
+        )
+        
+        // Then
+        assertNotEquals(history1, history2)
+    }
+    
+    @Test
+    fun `noteEditHistory default edition number is zero`() {
+        // Given/When
+        val history = NoteEditHistory(
+            noteId = 1,
+            fieldName = "Test",
+            oldValue = "Old",
+            newValue = "New",
+            timestamp = System.currentTimeMillis(),
+            modifiedBy = "User"
+        )
+        
+        // Then
+        assertEquals(0, history.editionNumber)
     }
 }

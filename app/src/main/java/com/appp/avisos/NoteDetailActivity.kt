@@ -9,7 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.appp.avisos.adapter.EditHistoryAdapter
+import com.appp.avisos.adapter.EditionHistoryAdapter
 import com.appp.avisos.databinding.ActivityNoteDetailBinding
 import com.appp.avisos.viewmodel.NoteEditorViewModel
 import java.time.Instant
@@ -24,8 +24,9 @@ class NoteDetailActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityNoteDetailBinding
     private val viewModel: NoteEditorViewModel by viewModels()
-    private lateinit var editHistoryAdapter: EditHistoryAdapter
+    private lateinit var editionHistoryAdapter: EditionHistoryAdapter
     private var isEditHistoryExpanded = false
+    private var currentNoteId: Int = 0
     
     companion object {
         const val EXTRA_NOTE_ID = "note_id"
@@ -72,10 +73,17 @@ class NoteDetailActivity : AppCompatActivity() {
      * Set up the edit history RecyclerView with adapter
      */
     private fun setupEditHistoryRecyclerView() {
-        editHistoryAdapter = EditHistoryAdapter()
+        editionHistoryAdapter = EditionHistoryAdapter { editionNumber ->
+            // Navigate to EditionDetailActivity when an edition is clicked
+            val intent = Intent(this, EditionDetailActivity::class.java).apply {
+                putExtra(EditionDetailActivity.EXTRA_NOTE_ID, currentNoteId)
+                putExtra(EditionDetailActivity.EXTRA_EDITION_NUMBER, editionNumber)
+            }
+            startActivity(intent)
+        }
         binding.recyclerViewEditHistory.apply {
             layoutManager = LinearLayoutManager(this@NoteDetailActivity)
-            adapter = editHistoryAdapter
+            adapter = editionHistoryAdapter
         }
     }
     
@@ -84,6 +92,7 @@ class NoteDetailActivity : AppCompatActivity() {
      */
     private fun loadNoteFromIntent() {
         val noteId = intent.getIntExtra(EXTRA_NOTE_ID, 0)
+        currentNoteId = noteId
         
         if (noteId != 0) {
             viewModel.loadNote(
@@ -130,13 +139,13 @@ class NoteDetailActivity : AppCompatActivity() {
      * Set up observer for edit history (called once in onCreate)
      */
     private fun setupEditHistoryObserver() {
-        val editHistoryLiveData = viewModel.getEditHistory()
-        if (editHistoryLiveData != null) {
-            editHistoryLiveData.observe(this) { historyList ->
-                if (historyList.isNotEmpty()) {
-                    // Show edit history section only if there are edits
+        val editionsLiveData = viewModel.getEditions()
+        if (editionsLiveData != null) {
+            editionsLiveData.observe(this) { editionsList ->
+                if (editionsList.isNotEmpty()) {
+                    // Show edit history section only if there are editions
                     binding.layoutEditHistorySection.visibility = View.VISIBLE
-                    editHistoryAdapter.submitList(historyList)
+                    editionHistoryAdapter.submitList(editionsList)
                 } else {
                     // Hide edit history section if no edits
                     binding.layoutEditHistorySection.visibility = View.GONE

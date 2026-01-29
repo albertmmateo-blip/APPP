@@ -13,7 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
  * This is a singleton database class that provides access to the Note entity
  * and its corresponding DAO.
  */
-@Database(entities = [Note::class, NoteEditHistory::class], version = 7, exportSchema = false)
+@Database(entities = [Note::class, NoteEditHistory::class], version = 8, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     
     /**
@@ -76,6 +76,18 @@ abstract class AppDatabase : RoomDatabase() {
         }
         
         /**
+         * Migration from version 7 to 8: Add edition_number field to edit history
+         */
+        private val MIGRATION_7_8 = object : Migration(7, 8) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Add edition_number column to note_edit_history table
+                db.execSQL("ALTER TABLE note_edit_history ADD COLUMN edition_number INTEGER NOT NULL DEFAULT 0")
+                // Create index on edition_number for efficient grouping
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_note_edit_history_edition_number ON note_edit_history(edition_number)")
+            }
+        }
+        
+        /**
          * Gets the singleton instance of AppDatabase.
          * 
          * @param context Application context
@@ -90,7 +102,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "appp_avisos_db"
                 )
-                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
+                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
                     .build()
                 
                 INSTANCE = instance

@@ -48,4 +48,32 @@ interface NoteEditHistoryDao {
      */
     @Query("SELECT DISTINCT modified_by FROM note_edit_history WHERE note_id = :noteId AND modified_by IS NOT NULL ORDER BY modified_by ASC")
     suspend fun getDistinctModifiersForNote(noteId: Int): List<String>
+    
+    /**
+     * Get the maximum edition number for a specific note
+     * Returns 0 if no edits exist yet
+     */
+    @Query("SELECT COALESCE(MAX(edition_number), 0) FROM note_edit_history WHERE note_id = :noteId")
+    suspend fun getMaxEditionNumber(noteId: Int): Int
+    
+    /**
+     * Get all distinct edition numbers for a note with their timestamps and users
+     * Returns a list of editions ordered by edition number descending (newest first)
+     */
+    @Query("""
+        SELECT DISTINCT edition_number, timestamp, modified_by, note_id, 
+               MIN(id) as id, '' as field_name, '' as old_value, '' as new_value
+        FROM note_edit_history 
+        WHERE note_id = :noteId 
+        GROUP BY edition_number, timestamp, modified_by, note_id
+        ORDER BY edition_number DESC
+    """)
+    fun getEditionsForNote(noteId: Int): LiveData<List<NoteEditHistory>>
+    
+    /**
+     * Get all changes for a specific edition
+     */
+    @Query("SELECT * FROM note_edit_history WHERE note_id = :noteId AND edition_number = :editionNumber ORDER BY timestamp ASC")
+    fun getChangesForEdition(noteId: Int, editionNumber: Int): LiveData<List<NoteEditHistory>>
 }
+

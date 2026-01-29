@@ -53,6 +53,10 @@
             android:name=".VendaSubcategoryDetailActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".EditionDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".NoteDetailActivity" />
     </application>
 
 </manifest>
