@@ -28,6 +28,7 @@ class NoteDetailActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_NOTE_ID = "note_id"
         const val EXTRA_CURRENT_CATEGORY = "current_category"
+        private const val STATE_HISTORY_EXPANDED = "state_history_expanded"
         
         private val dateFormatter: DateTimeFormatter = 
             DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
@@ -38,14 +39,31 @@ class NoteDetailActivity : AppCompatActivity() {
         binding = ActivityNoteDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
+        // Restore expanded state if available
+        isEditHistoryExpanded = savedInstanceState?.getBoolean(STATE_HISTORY_EXPANDED, false) ?: false
+        
         // Set up edit history RecyclerView
         setupEditHistoryRecyclerView()
+        
+        // Set up edit history observer (do this once in onCreate)
+        setupEditHistoryObserver()
         
         // Load note if ID is provided
         loadNoteFromIntent()
         
         // Set up button listeners
         setupButtonListeners()
+        
+        // Restore UI state if needed
+        if (isEditHistoryExpanded) {
+            // UI will be updated when observer receives data
+            updateToggleButtonState()
+        }
+    }
+    
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(STATE_HISTORY_EXPANDED, isEditHistoryExpanded)
     }
     
     /**
@@ -76,9 +94,6 @@ class NoteDetailActivity : AppCompatActivity() {
                     binding.textCategory.text = note.category
                     binding.textCreatedDate.text = formatDate(note.createdDate)
                     binding.textModifiedDate.text = formatDate(note.modifiedDate)
-                    
-                    // Load edit history
-                    loadEditHistory()
                 },
                 onError = { error ->
                     Toast.makeText(this, "Error loading note: $error", Toast.LENGTH_LONG).show()
@@ -92,9 +107,9 @@ class NoteDetailActivity : AppCompatActivity() {
     }
     
     /**
-     * Load and observe edit history for the current note
+     * Set up observer for edit history (called once in onCreate)
      */
-    private fun loadEditHistory() {
+    private fun setupEditHistoryObserver() {
         val editHistoryLiveData = viewModel.getEditHistory()
         if (editHistoryLiveData != null) {
             editHistoryLiveData.observe(this) { historyList ->
@@ -132,7 +147,13 @@ class NoteDetailActivity : AppCompatActivity() {
      */
     private fun toggleEditHistory() {
         isEditHistoryExpanded = !isEditHistoryExpanded
-        
+        updateToggleButtonState()
+    }
+    
+    /**
+     * Update the toggle button and RecyclerView based on expanded state
+     */
+    private fun updateToggleButtonState() {
         if (isEditHistoryExpanded) {
             // Show edit history
             binding.recyclerViewEditHistory.visibility = View.VISIBLE

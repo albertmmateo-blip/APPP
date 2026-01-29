@@ -30,10 +30,8 @@
     <string name="button_back">Back</string>
     
     <!-- Edit History labels -->
-    <string name="label_edit_history">Edit History</string>
     <string name="button_view_edit_history">View edit history</string>
     <string name="button_hide_edit_history">Hide edit history</string>
-    <string name="label_no_edit_history">No edits have been made yet</string>
     <string name="label_changed_from">Changed from:</string>
     <string name="label_changed_to">To:</string>
     

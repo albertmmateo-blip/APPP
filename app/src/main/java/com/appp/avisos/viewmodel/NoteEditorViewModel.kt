@@ -181,8 +181,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                 NoteEditHistory(
                     noteId = oldNote.id,
                     fieldName = "Contact",
-                    oldValue = oldNote.contact ?: "(empty)",
-                    newValue = newNote.contact ?: "(empty)",
+                    oldValue = oldNote.contact,
+                    newValue = newNote.contact,
                     timestamp = timestamp
                 )
             )

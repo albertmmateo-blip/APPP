@@ -85,17 +85,17 @@ echo ""
 echo "4. Verifying implementation requirements..."
 
 # Check that section has visibility control
-if grep -q 'android:visibility="gone"' app/src/main/res/layout/activity_note_detail.xml | grep -q "layoutEditHistorySection"; then
+if grep -A 5 'android:id="@+id/layoutEditHistorySection"' app/src/main/res/layout/activity_note_detail.xml | grep -q 'android:visibility="gone"'; then
     echo "   ✓ Edit history section hidden by default (GONE)"
 else
     echo "   ⚠ Check that layoutEditHistorySection has visibility=\"gone\""
 fi
 
-# Check for loadEditHistory method
-if grep -q "loadEditHistory" app/src/main/java/com/appp/avisos/NoteDetailActivity.kt; then
-    echo "   ✓ loadEditHistory method found in NoteDetailActivity"
+# Check for setupEditHistoryObserver method
+if grep -q "setupEditHistoryObserver" app/src/main/java/com/appp/avisos/NoteDetailActivity.kt; then
+    echo "   ✓ setupEditHistoryObserver method found in NoteDetailActivity"
 else
-    echo "   ✗ loadEditHistory method not found"
+    echo "   ✗ setupEditHistoryObserver method not found"
 fi
 
 # Check for toggleEditHistory method
