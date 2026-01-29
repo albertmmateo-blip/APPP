@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.appp.avisos.database.AppDatabase
 import com.appp.avisos.database.Note
+import com.appp.avisos.database.NoteEditHistory
 import com.appp.avisos.repository.NoteRepository
 import kotlinx.coroutines.launch
 
@@ -23,8 +24,10 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
     val currentNote: LiveData<Note?> = _currentNote
     
     init {
-        val noteDao = AppDatabase.getInstance(application).noteDao()
-        repository = NoteRepository(noteDao)
+        val database = AppDatabase.getInstance(application)
+        val noteDao = database.noteDao()
+        val editHistoryDao = database.noteEditHistoryDao()
+        repository = NoteRepository(noteDao, editHistoryDao)
     }
     
     /**
@@ -72,7 +75,7 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
     /**
      * Save a note with the provided fields.
      * Creates a new note if no note is currently loaded, otherwise updates the existing note.
-     * Automatically sets timestamps correctly.
+     * Automatically sets timestamps correctly and records edit history for updates.
      * 
      * @param name The note name
      * @param body The note body
@@ -123,6 +126,9 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                 }
                 
                 if (existingNote != null) {
+                    // Track changes for edit history
+                    recordEditHistory(existingNote, note, currentTime)
+                    
                     repository.updateNote(note)
                     _currentNote.value = note
                 } else {
@@ -136,6 +142,63 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
             } catch (e: Exception) {
                 onError(e.message ?: "Failed to save note")
             }
+        }
+    }
+    
+    /**
+     * Record edit history for changed fields
+     */
+    private suspend fun recordEditHistory(oldNote: Note, newNote: Note, timestamp: Long) {
+        // Track name changes
+        if (oldNote.name != newNote.name) {
+            repository.insertEditHistory(
+                NoteEditHistory(
+                    noteId = oldNote.id,
+                    fieldName = "Note Name",
+                    oldValue = oldNote.name,
+                    newValue = newNote.name,
+                    timestamp = timestamp
+                )
+            )
+        }
+        
+        // Track body changes
+        if (oldNote.body != newNote.body) {
+            repository.insertEditHistory(
+                NoteEditHistory(
+                    noteId = oldNote.id,
+                    fieldName = "Note Body",
+                    oldValue = oldNote.body,
+                    newValue = newNote.body,
+                    timestamp = timestamp
+                )
+            )
+        }
+        
+        // Track contact changes
+        if (oldNote.contact != newNote.contact) {
+            repository.insertEditHistory(
+                NoteEditHistory(
+                    noteId = oldNote.id,
+                    fieldName = "Contact",
+                    oldValue = oldNote.contact,
+                    newValue = newNote.contact,
+                    timestamp = timestamp
+                )
+            )
+        }
+        
+        // Track category changes
+        if (oldNote.category != newNote.category) {
+            repository.insertEditHistory(
+                NoteEditHistory(
+                    noteId = oldNote.id,
+                    fieldName = "Category",
+                    oldValue = oldNote.category,
+                    newValue = newNote.category,
+                    timestamp = timestamp
+                )
+            )
         }
     }
     
@@ -163,6 +226,18 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
             } catch (e: Exception) {
                 onError(e.message ?: "Failed to delete note")
             }
+        }
+    }
+    
+    /**
+     * Get edit history for the currently loaded note
+     */
+    fun getEditHistory(): LiveData<List<NoteEditHistory>>? {
+        val noteId = _currentNote.value?.id
+        return if (noteId != null && noteId != 0) {
+            repository.getEditHistoryForNote(noteId)
+        } else {
+            null
         }
     }
 }
