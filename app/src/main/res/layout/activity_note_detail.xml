@@ -131,7 +131,8 @@
                 android:text="@string/badge_urgent"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:contentDescription="@string/accessibility_urgent_note" />
 
         </LinearLayout>
 

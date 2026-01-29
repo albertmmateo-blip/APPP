@@ -22,6 +22,7 @@
     <string name="label_modified_date">Last Modified</string>
     <string name="label_urgent">Mark as Urgent</string>
     <string name="badge_urgent">URGENT</string>
+    <string name="accessibility_urgent_note">This note is marked as urgent</string>
     <string name="no_contact">No contact information</string>
     
     <!-- Button labels -->

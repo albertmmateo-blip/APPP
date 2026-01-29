@@ -35,6 +35,7 @@
             android:textColor="@android:color/white"
             android:textSize="12sp"
             android:textStyle="bold"
+            android:contentDescription="@string/accessibility_urgent_note"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
