@@ -9,6 +9,8 @@
     <string name="category_encarregar">Encarregar</string>
     <string name="category_factures">Factures</string>
     <string name="category_notes">Notes</string>
+    <string name="category_compra">Compra</string>
+    <string name="category_venda">Venda</string>
     
     <!-- Content descriptions -->
     <string name="fab_add_note">Add new note</string>
@@ -102,4 +104,16 @@
     <string name="factures_per_pagar_desc">Factures pendents de pagament</string>
     <string name="factures_per_cobrar">Per cobrar</string>
     <string name="factures_per_cobrar_desc">Factures per cobrar</string>
+    
+    <!-- Compra Subcategories -->
+    <string name="compra_passades">Passades</string>
+    <string name="compra_passades_desc">Compres comptabilitzades</string>
+    <string name="compra_per_passar">Per passar</string>
+    <string name="compra_per_passar_desc">Per comptabilitzar</string>
+    
+    <!-- Venda Subcategories -->
+    <string name="venda_passades">Passades</string>
+    <string name="venda_passades_desc">Vendes comptabilitzades</string>
+    <string name="venda_per_passar">Per passar</string>
+    <string name="venda_per_passar_desc">Per comptabilitzar</string>
 </resources>

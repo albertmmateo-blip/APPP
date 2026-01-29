@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sessionManager: UserSessionManager
     
     // Categories corresponding to tab positions
-    private val categories = arrayOf("Trucar", "Encarregar", "Factures", "Notes")
+    private val categories = arrayOf("Trucar", "Encarregar", "Factures", "Notes", "Compra", "Venda")
     
     // Track the currently selected category
     private var currentCategory: String? = null
@@ -86,6 +86,14 @@ class MainActivity : AppCompatActivity() {
                     tab.setText(R.string.category_notes)
                     tab.setIcon(R.drawable.ic_note)
                 }
+                4 -> {
+                    tab.setText(R.string.category_compra)
+                    tab.setIcon(R.drawable.ic_wallet_compra)
+                }
+                5 -> {
+                    tab.setText(R.string.category_venda)
+                    tab.setIcon(R.drawable.ic_wallet_venda)
+                }
             }
         }.attach()
         
@@ -123,6 +131,14 @@ class MainActivity : AppCompatActivity() {
         
         viewModel.notesCount.observe(this) { count ->
             updateTabBadge(3, count)
+        }
+        
+        viewModel.compraCount.observe(this) { count ->
+            updateTabBadge(4, count)
+        }
+        
+        viewModel.vendaCount.observe(this) { count ->
+            updateTabBadge(5, count)
         }
     }
     
@@ -169,6 +185,8 @@ class MainActivity : AppCompatActivity() {
                 1 -> R.color.category_encarregar  // Orange for Encarregar
                 2 -> R.color.category_factures    // Red for Factures
                 3 -> R.color.category_notes       // Darker tan for Notes
+                4 -> R.color.category_compra      // Red for Compra
+                5 -> R.color.category_venda       // Green for Venda
                 else -> R.color.text_on_primary   // Default white
             }
             val color = ContextCompat.getColor(this, categoryColorResId)
