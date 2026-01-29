@@ -2,7 +2,7 @@ package com.appp.avisos
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.appp.avisos.databinding.ActivityUserSelectionBinding
 
@@ -21,6 +21,13 @@ class UserSelectionActivity : AppCompatActivity() {
         setContentView(binding.root)
         
         sessionManager = UserSessionManager(this)
+        
+        // Disable back button to prevent bypassing user selection
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do nothing - prevent going back from user selection screen
+            }
+        })
         
         // Set up button click listeners for each user
         setupUserButtons()
@@ -52,11 +59,5 @@ class UserSelectionActivity : AppCompatActivity() {
         
         // Finish this activity so user can't go back to selection without logging out
         finish()
-    }
-    
-    override fun onBackPressed() {
-        // Prevent going back from user selection screen
-        // User must select a user to proceed
-        // Do nothing
     }
 }
