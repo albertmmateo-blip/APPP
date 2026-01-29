@@ -14,24 +14,27 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- AppBar Layout - Contains Toolbar for app title -->
+    <!-- AppBar Layout - Contains Toolbar for app title with orange background -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/entretelas_header"
         android:theme="@style/ThemeOverlay.Material3.Dark">
 
-        <!-- Toolbar with app title "Entretelas" -->
+        <!-- Toolbar with app title "Entretelas" with orange background -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/entretelas_header"
             app:title="@string/app_title"
             app:titleTextColor="@color/text_on_primary" />
 
         <!-- TabLayout with 4 tabs for categories
              Each tab includes both icon and text label
-             Scrollable for smaller screens -->
+             Scrollable for smaller screens
+             White indicator and text on orange background for visibility -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
@@ -39,9 +42,9 @@
             app:tabMode="scrollable"
             app:tabIndicatorHeight="3dp"
             app:tabInlineLabel="false"
-            app:tabSelectedTextColor="@color/secondary"
+            app:tabSelectedTextColor="@color/text_on_primary"
             app:tabTextColor="@color/text_on_primary"
-            app:tabIndicatorColor="@color/secondary" />
+            app:tabIndicatorColor="@color/text_on_primary" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -53,7 +56,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <!-- FloatingActionButton for adding new notes
+    <!-- FloatingActionButton for adding new notes with orange background
          Positioned at bottom-right corner
          Displays "+" icon with appropriate content description for accessibility -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -65,7 +68,7 @@
         android:contentDescription="@string/fab_add_note"
         app:fabSize="normal"
         app:srcCompat="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/secondary"
+        app:backgroundTint="@color/entretelas_header"
         app:tint="@color/text_on_secondary" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

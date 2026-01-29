@@ -1,9 +1,11 @@
 package com.appp.avisos
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.appp.avisos.adapter.CategoryPagerAdapter
 import com.appp.avisos.database.Note
 import com.appp.avisos.databinding.ActivityMainBinding
@@ -20,6 +22,9 @@ class MainActivity : AppCompatActivity() {
     
     // Track the currently selected category
     private var currentCategory: String? = null
+    
+    // Track the previously selected tab position for optimization
+    private var previousSelectedPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,16 +75,20 @@ class MainActivity : AppCompatActivity() {
             }
         }.attach()
         
-        // Set up page change listener to track current category
+        // Set up page change listener to track current category and update tab icon colors
         binding.viewPager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 currentCategory = categories[position]
+                updateTabIconColors(position)
             }
         })
         
-        // Set initial category
+        // Set initial category and icon colors (post to ensure tabs are initialized)
         currentCategory = categories[0]
+        binding.tabLayout.post {
+            updateTabIconColors(0)
+        }
     }
     
     /**
@@ -119,6 +128,41 @@ class MainActivity : AppCompatActivity() {
         } else {
             tab.removeBadge()
         }
+    }
+    
+    /**
+     * Update tab icon colors based on the currently selected tab
+     * The selected tab icon gets its category color, while others remain white
+     * Optimized to only update the previously selected and newly selected tabs
+     * 
+     * @param selectedPosition The position of the currently selected tab
+     */
+    private fun updateTabIconColors(selectedPosition: Int) {
+        // Get white color for unselected tabs
+        val whiteColor = ContextCompat.getColor(this, R.color.text_on_primary)
+        
+        // Reset previous selected tab to white (if different from current)
+        if (previousSelectedPosition != selectedPosition) {
+            val previousTab = binding.tabLayout.getTabAt(previousSelectedPosition)
+            previousTab?.icon?.setTintList(ColorStateList.valueOf(whiteColor))
+        }
+        
+        // Apply category-specific color to newly selected tab
+        val currentTab = binding.tabLayout.getTabAt(selectedPosition)
+        if (currentTab != null) {
+            val categoryColorResId = when (selectedPosition) {
+                0 -> R.color.category_trucar      // Blue for Trucar
+                1 -> R.color.category_encarregar  // Orange for Encarregar
+                2 -> R.color.category_factures    // Red for Factures
+                3 -> R.color.category_notes       // Darker tan for Notes
+                else -> R.color.text_on_primary   // Default white
+            }
+            val color = ContextCompat.getColor(this, categoryColorResId)
+            currentTab.icon?.setTintList(ColorStateList.valueOf(color))
+        }
+        
+        // Update previous position tracker
+        previousSelectedPosition = selectedPosition
     }
     
     /**

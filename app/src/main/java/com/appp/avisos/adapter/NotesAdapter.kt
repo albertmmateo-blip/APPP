@@ -56,10 +56,10 @@ class NotesAdapter(
             // Set note body preview (ellipsized by layout)
             binding.textNoteBody.text = note.body
             
-            // Set category color indicator
-            val colorResId = getCategoryColor(note.category)
-            val color = ContextCompat.getColor(binding.root.context, colorResId)
-            binding.categoryColorIndicator.setBackgroundColor(color)
+            // Set category background color to the card
+            val bgColorResId = getCategoryBackgroundColor(note.category)
+            val bgColor = ContextCompat.getColor(binding.root.context, bgColorResId)
+            binding.noteCardView.setCardBackgroundColor(bgColor)
             
             // Handle urgent indicator
             if (note.isUrgent) {
@@ -134,6 +134,22 @@ class NotesAdapter(
                 "Factures" -> R.color.category_factures
                 "Notes" -> R.color.category_notes
                 else -> R.color.primary // Default fallback color
+            }
+        }
+        
+        /**
+         * Maps category names to their corresponding light background color resource IDs.
+         * 
+         * @param category The category name (e.g., "Trucar", "Encarregar", "Factures", "Notes")
+         * @return The background color resource ID for the category
+         */
+        private fun getCategoryBackgroundColor(category: String): Int {
+            return when (category) {
+                "Trucar" -> R.color.category_trucar_bg
+                "Encarregar" -> R.color.category_encarregar_bg
+                "Factures" -> R.color.category_factures_bg
+                "Notes" -> R.color.category_notes_bg
+                else -> R.color.surface // Default fallback color
             }
         }
     }
