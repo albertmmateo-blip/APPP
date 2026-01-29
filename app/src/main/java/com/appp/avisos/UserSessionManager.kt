@@ -30,8 +30,12 @@ class UserSessionManager(context: Context) {
     /**
      * Save the currently logged-in user
      * @param username The username to save
+     * @throws IllegalArgumentException if username is not in AVAILABLE_USERS
      */
     fun setCurrentUser(username: String) {
+        if (!AVAILABLE_USERS.contains(username)) {
+            throw IllegalArgumentException("Invalid username: $username")
+        }
         sharedPreferences.edit()
             .putString(KEY_CURRENT_USER, username)
             .apply()

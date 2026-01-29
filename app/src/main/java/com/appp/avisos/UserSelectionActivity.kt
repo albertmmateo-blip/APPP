@@ -23,9 +23,11 @@ class UserSelectionActivity : AppCompatActivity() {
         sessionManager = UserSessionManager(this)
         
         // Disable back button to prevent bypassing user selection
+        // Allow exiting the app entirely if user presses back
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                // Do nothing - prevent going back from user selection screen
+                // Exit the app when back is pressed on user selection screen
+                finish()
             }
         })
         
