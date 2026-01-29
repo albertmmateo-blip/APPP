@@ -69,7 +69,7 @@ class CategoryFragment : Fragment() {
             "Trucar" -> viewModel.trucarNotes
             "Encarregar" -> viewModel.encarregarNotes
             "Factures" -> viewModel.facturesNotes
-            "Notes" -> viewModel.categoryNotes
+            "Notes" -> viewModel.generalNotes
             else -> viewModel.trucarNotes // Default fallback
         }
         
@@ -88,6 +88,10 @@ class CategoryFragment : Fragment() {
         // TODO: Show empty state view when implemented
     }
     
+    /**
+     * Open NoteDetailActivity to view a note in read-only mode
+     * @param note The note to display in the detail view
+     */
     private fun openNoteDetail(note: Note) {
         val intent = Intent(requireContext(), NoteDetailActivity::class.java).apply {
             putExtra(NoteDetailActivity.EXTRA_NOTE_ID, note.id)
@@ -104,6 +108,11 @@ class CategoryFragment : Fragment() {
     companion object {
         private const val ARG_CATEGORY = "category"
         
+        /**
+         * Factory method to create a new instance of CategoryFragment
+         * @param category The category name to display notes for
+         * @return A new CategoryFragment instance configured for the specified category
+         */
         fun newInstance(category: String): CategoryFragment {
             return CategoryFragment().apply {
                 arguments = Bundle().apply {

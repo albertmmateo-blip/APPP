@@ -47,6 +47,8 @@ interface NoteDao {
     
     /**
      * Get count of notes in a specific category
+     * @param category The category name to count notes for
+     * @return LiveData containing the count of notes in the category
      */
     @Query("SELECT COUNT(*) FROM notes WHERE category = :category")
     fun getNoteCountByCategory(category: String): LiveData<Int>
