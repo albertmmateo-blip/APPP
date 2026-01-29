@@ -45,31 +45,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Main content container with RecyclerView
+    <!-- Main content container with ViewPager2
          Uses app:layout_behavior to work with CoordinatorLayout scrolling -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <!-- RecyclerView for displaying list of notes
-             Fills available space below TabLayout
-             Supports dynamic content and smooth scrolling -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewNotes"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clipToPadding="false"
-            android:paddingBottom="@dimen/recycler_view_fab_padding"
-            android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/item_note" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <!-- FloatingActionButton for adding new notes
          Positioned at bottom-right corner
