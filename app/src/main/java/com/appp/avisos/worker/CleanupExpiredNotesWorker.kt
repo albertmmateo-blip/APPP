@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.appp.avisos.database.AppDatabase
+import com.appp.avisos.database.Note
 import com.appp.avisos.repository.NoteRepository
 
 /**
