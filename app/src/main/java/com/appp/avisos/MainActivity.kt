@@ -3,8 +3,10 @@ package com.appp.avisos
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -12,6 +14,7 @@ import com.appp.avisos.adapter.CategoryPagerAdapter
 import com.appp.avisos.database.Note
 import com.appp.avisos.databinding.ActivityMainBinding
 import com.appp.avisos.viewmodel.MainViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +31,9 @@ class MainActivity : AppCompatActivity() {
     
     // Track the previously selected tab position for optimization
     private var previousSelectedPosition: Int = 0
+    
+    // Track if we're programmatically changing tabs (to avoid triggering password dialog)
+    private var isHandlingProgrammaticTabChange: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,12 +103,60 @@ class MainActivity : AppCompatActivity() {
             }
         }.attach()
         
+        // Add tab selection listener to handle Factures authentication
+        binding.tabLayout.addOnTabSelectedListener(object : com.google.android.material.tabs.TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: com.google.android.material.tabs.TabLayout.Tab) {
+                val position = tab.position
+                val categoryName = categories[position]
+                
+                // Check if user is trying to access Factures tab
+                if (categoryName == "Factures" && !isHandlingProgrammaticTabChange) {
+                    val currentUser = sessionManager.getCurrentUser()
+                    
+                    // Only Pedro can access Factures
+                    if (currentUser == "Pedro") {
+                        // Check if already authenticated
+                        if (!sessionManager.isFacturesAuthenticated()) {
+                            // Block the tab change and show password dialog
+                            isHandlingProgrammaticTabChange = true
+                            binding.viewPager.post {
+                                binding.viewPager.setCurrentItem(previousSelectedPosition, false)
+                                isHandlingProgrammaticTabChange = false
+                                showFacturesPasswordDialog(position)
+                            }
+                        }
+                    } else {
+                        // Non-Pedro users cannot access Factures at all
+                        isHandlingProgrammaticTabChange = true
+                        binding.viewPager.post {
+                            binding.viewPager.setCurrentItem(previousSelectedPosition, false)
+                            isHandlingProgrammaticTabChange = false
+                            showAccessDeniedDialog()
+                        }
+                    }
+                }
+            }
+            
+            override fun onTabUnselected(tab: com.google.android.material.tabs.TabLayout.Tab) {
+                // No action needed
+            }
+            
+            override fun onTabReselected(tab: com.google.android.material.tabs.TabLayout.Tab) {
+                // No action needed
+            }
+        })
+        
         // Set up page change listener to track current category and update tab icon colors
         binding.viewPager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 currentCategory = categories[position]
                 updateTabIconColors(position)
+                
+                // Update previous position only if this is not a blocked attempt
+                if (!isHandlingProgrammaticTabChange) {
+                    previousSelectedPosition = position
+                }
             }
         })
         
@@ -231,6 +285,62 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(NoteEditorActivity.EXTRA_CURRENT_CATEGORY, currentCategory)
         
         startActivity(intent)
+    }
+    
+    /**
+     * Show password dialog for Factures access
+     * @param facturesPosition The position of the Factures tab to navigate to on success
+     */
+    private fun showFacturesPasswordDialog(facturesPosition: Int) {
+        val passwordInput = EditText(this).apply {
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            hint = "Contrasenya"
+        }
+        
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Accés a Factures")
+            .setMessage("Aquesta categoria està restringida. Si us plau, introdueix la contrasenya:")
+            .setView(passwordInput)
+            .setPositiveButton("Acceptar") { dialog, _ ->
+                val enteredPassword = passwordInput.text.toString()
+                if (sessionManager.validateFacturesPassword(enteredPassword)) {
+                    // Password correct - grant access and navigate to Factures
+                    sessionManager.setFacturesAuthenticated(true)
+                    isHandlingProgrammaticTabChange = true
+                    binding.viewPager.post {
+                        binding.viewPager.setCurrentItem(facturesPosition, true)
+                        isHandlingProgrammaticTabChange = false
+                    }
+                } else {
+                    // Password incorrect - show error
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("Error")
+                        .setMessage("Contrasenya incorrecta")
+                        .setPositiveButton("D'acord", null)
+                        .show()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel·lar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setOnCancelListener { dialog ->
+                // Handle back button or outside tap same as cancel button
+                dialog.dismiss()
+            }
+            .setCancelable(true)
+            .show()
+    }
+    
+    /**
+     * Show access denied dialog for non-Pedro users
+     */
+    private fun showAccessDeniedDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Accés Denegat")
+            .setMessage("Només l'usuari Pedro té accés a la categoria Factures.")
+            .setPositiveButton("D'acord", null)
+            .show()
     }
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
