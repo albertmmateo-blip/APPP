@@ -2,6 +2,8 @@ package com.appp.avisos
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -17,6 +19,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 /**
  * Integration tests for NoteEditHistoryDao
@@ -45,6 +49,36 @@ class NoteEditHistoryDaoTest {
     fun teardown() {
         database.close()
     }
+    
+    /**
+     * Helper function to get value from LiveData synchronously for testing
+     */
+    private fun <T> LiveData<T>.getOrAwaitValue(
+        time: Long = 2,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+    ): T {
+        var data: T? = null
+        val latch = CountDownLatch(1)
+        val observer = object : Observer<T> {
+            override fun onChanged(value: T) {
+                data = value
+                latch.countDown()
+                this@getOrAwaitValue.removeObserver(this)
+            }
+        }
+        this.observeForever(observer)
+        
+        // Wait for LiveData to emit a value
+        if (!latch.await(time, timeUnit)) {
+            this.removeObserver(observer)
+            throw TimeoutException("LiveData value was never set.")
+        }
+        
+        @Suppress("UNCHECKED_CAST")
+        return data as T
+    }
+    
+    class TimeoutException(message: String) : Exception(message)
     
     @Test
     fun insertAndRetrieveEditHistory() = runBlocking {
@@ -433,32 +467,23 @@ class NoteEditHistoryDaoTest {
         val totalCount = editHistoryDao.getEditHistoryCount(noteId)
         assertEquals(5, totalCount)
         
-        // This test requires LiveData observation, which needs lifecycle support
-        // We'll test by using a simple observer
-        var editionsList: List<NoteEditHistory>? = null
-        val liveData = editHistoryDao.getEditionsForNote(noteId)
-        liveData.observeForever { editions ->
-            editionsList = editions
-        }
-        
-        // Give time for LiveData to emit
-        Thread.sleep(100)
+        // Get editions using the helper function for reliable LiveData testing
+        val editionsList = editHistoryDao.getEditionsForNote(noteId).getOrAwaitValue()
         
         // Verify we got exactly 2 edition rows (not 5)
-        assertNotNull(editionsList)
-        assertEquals(2, editionsList!!.size)
+        assertEquals(2, editionsList.size)
         
         // Verify the editions are returned in descending order (newest first)
-        assertEquals(2, editionsList!![0].editionNumber)
-        assertEquals(1, editionsList!![1].editionNumber)
+        assertEquals(2, editionsList[0].editionNumber)
+        assertEquals(1, editionsList[1].editionNumber)
         
         // Verify the edition for User1 has the earliest timestamp from that edition
-        assertEquals(timestamp, editionsList!![1].timestamp)
-        assertEquals("User1", editionsList!![1].modifiedBy)
+        assertEquals(timestamp, editionsList[1].timestamp)
+        assertEquals("User1", editionsList[1].modifiedBy)
         
         // Verify the edition for User2
-        assertEquals(timestamp + 1000, editionsList!![0].timestamp)
-        assertEquals("User2", editionsList!![0].modifiedBy)
+        assertEquals(timestamp + 1000, editionsList[0].timestamp)
+        assertEquals("User2", editionsList[0].modifiedBy)
     }
 }
 

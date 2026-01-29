@@ -60,7 +60,10 @@ interface NoteEditHistoryDao {
      * Get all distinct edition numbers for a note with their timestamps and users
      * Returns a list of editions ordered by edition number descending (newest first)
      * Groups by edition_number only to ensure one row per edition
+     * 
      * Note: All changes within a single edition have the same modified_by value
+     * (enforced by the business logic in NoteEditorViewModel.recordEditHistory).
+     * MIN(modified_by) is used here for SQL aggregation purposes.
      */
     @Query("""
         SELECT edition_number, 
