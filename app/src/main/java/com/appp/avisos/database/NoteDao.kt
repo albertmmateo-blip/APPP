@@ -28,15 +28,15 @@ interface NoteDao {
     suspend fun deleteNote(note: Note)
     
     /**
-     * Get all notes sorted by modified date descending (newest first)
+     * Get all notes sorted by urgent flag (urgent first), then modified date descending (newest first)
      */
-    @Query("SELECT * FROM notes ORDER BY modified_date DESC")
+    @Query("SELECT * FROM notes ORDER BY is_urgent DESC, modified_date DESC")
     fun getAllNotes(): LiveData<List<Note>>
     
     /**
-     * Get notes filtered by category, sorted by modified date descending (newest first)
+     * Get notes filtered by category, sorted by urgent flag (urgent first), then modified date descending (newest first)
      */
-    @Query("SELECT * FROM notes WHERE category = :category ORDER BY modified_date DESC")
+    @Query("SELECT * FROM notes WHERE category = :category ORDER BY is_urgent DESC, modified_date DESC")
     fun getNotesByCategory(category: String): LiveData<List<Note>>
     
     /**

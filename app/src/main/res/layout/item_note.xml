@@ -20,6 +20,26 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Urgent indicator badge -->
+        <TextView
+            android:id="@+id/textUrgentBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/holo_red_light"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="@string/badge_urgent"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
         <!-- Note name/title -->
         <TextView
             android:id="@+id/textNoteName"
@@ -30,7 +50,7 @@
             android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/textUrgentBadge"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Note Title" />

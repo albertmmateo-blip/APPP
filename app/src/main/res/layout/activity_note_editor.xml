@@ -77,6 +77,15 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Urgent checkbox -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxUrgent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/label_urgent"
+            android:textSize="16sp" />
+
         <!-- Category selection label -->
         <TextView
             android:id="@+id/textViewCategoryLabel"

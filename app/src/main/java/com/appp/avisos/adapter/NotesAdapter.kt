@@ -54,6 +54,13 @@ class NotesAdapter(
             // Set note body preview (ellipsized by layout)
             binding.textNoteBody.text = note.body
             
+            // Handle urgent indicator
+            if (note.isUrgent) {
+                binding.textUrgentBadge.visibility = View.VISIBLE
+            } else {
+                binding.textUrgentBadge.visibility = View.GONE
+            }
+            
             // Handle contact info
             if (note.contact.isNullOrEmpty()) {
                 // Hide contact info if not available

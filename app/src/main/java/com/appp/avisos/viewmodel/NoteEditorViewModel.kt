@@ -81,6 +81,7 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
      * @param body The note body
      * @param contact Optional contact information
      * @param category The note category
+     * @param isUrgent Whether the note is marked as urgent
      * @param onSuccess Callback invoked on successful save
      * @param onError Callback invoked if save fails
      */
@@ -89,6 +90,7 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
         body: String,
         contact: String?,
         category: String,
+        isUrgent: Boolean = false,
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
@@ -111,7 +113,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                         body = body.trim(),
                         contact = contact?.trim()?.ifEmpty { null },
                         category = category,
-                        modifiedDate = currentTime
+                        modifiedDate = currentTime,
+                        isUrgent = isUrgent
                     )
                 } else {
                     // Create new note - set both createdDate and modifiedDate
@@ -121,7 +124,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                         contact = contact?.trim()?.ifEmpty { null },
                         category = category,
                         createdDate = currentTime,
-                        modifiedDate = currentTime
+                        modifiedDate = currentTime,
+                        isUrgent = isUrgent
                     )
                 }
                 
@@ -196,6 +200,19 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     fieldName = "Category",
                     oldValue = oldNote.category,
                     newValue = newNote.category,
+                    timestamp = timestamp
+                )
+            )
+        }
+        
+        // Track urgent flag changes
+        if (oldNote.isUrgent != newNote.isUrgent) {
+            repository.insertEditHistory(
+                NoteEditHistory(
+                    noteId = oldNote.id,
+                    fieldName = "Urgent",
+                    oldValue = if (oldNote.isUrgent) "Yes" else "No",
+                    newValue = if (newNote.isUrgent) "Yes" else "No",
                     timestamp = timestamp
                 )
             )
