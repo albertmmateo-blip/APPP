@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
                 0 -> R.color.category_trucar      // Blue for Trucar
                 1 -> R.color.category_encarregar  // Orange for Encarregar
                 2 -> R.color.category_factures    // Red for Factures
-                3 -> R.color.category_notes       // Soft tan for Notes
+                3 -> R.color.category_notes       // Darker tan for Notes
                 else -> R.color.text_on_primary   // Default white
             }
             val color = ContextCompat.getColor(this, categoryColorResId)
