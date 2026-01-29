@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Note item layout for RecyclerView
-     Displays individual note information in a card format -->
+     Displays individual note information in a card format with category-themed background -->
 <com.google.android.material.card.MaterialCardView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/noteCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -13,23 +14,13 @@
     android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
-    app:strokeWidth="0dp">
+    app:strokeWidth="0dp"
+    tools:cardBackgroundColor="@color/category_trucar_bg">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
-
-        <!-- Category color indicator (left stripe) -->
-        <View
-            android:id="@+id/categoryColorIndicator"
-            android:layout_width="4dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:background="@color/category_trucar" />
 
         <!-- Urgent indicator badge -->
         <TextView
@@ -63,7 +54,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/textUrgentBadge"
-            app:layout_constraintStart_toEndOf="@id/categoryColorIndicator"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Note Title" />
 
@@ -78,7 +69,7 @@
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/categoryColorIndicator"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textNoteName"
             tools:text="Note body content preview goes here. This can span multiple lines up to three lines maximum..." />
 
@@ -91,7 +82,7 @@
             android:contentDescription="@string/label_contact"
             android:src="@drawable/ic_contact_mail"
             app:tint="?attr/colorOnSurfaceVariant"
-            app:layout_constraintStart_toEndOf="@id/categoryColorIndicator"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textNoteBody" />
 
         <!-- Contact info text -->

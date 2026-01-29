@@ -1,9 +1,11 @@
 package com.appp.avisos
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.appp.avisos.adapter.CategoryPagerAdapter
 import com.appp.avisos.database.Note
 import com.appp.avisos.databinding.ActivityMainBinding
@@ -70,16 +72,18 @@ class MainActivity : AppCompatActivity() {
             }
         }.attach()
         
-        // Set up page change listener to track current category
+        // Set up page change listener to track current category and update tab icon colors
         binding.viewPager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 currentCategory = categories[position]
+                updateTabIconColors(position)
             }
         })
         
-        // Set initial category
+        // Set initial category and icon colors
         currentCategory = categories[0]
+        updateTabIconColors(0)
     }
     
     /**
@@ -118,6 +122,35 @@ class MainActivity : AppCompatActivity() {
             badge.isVisible = true
         } else {
             tab.removeBadge()
+        }
+    }
+    
+    /**
+     * Update tab icon colors based on the currently selected tab
+     * The selected tab icon gets its category color, while others remain white
+     * 
+     * @param selectedPosition The position of the currently selected tab
+     */
+    private fun updateTabIconColors(selectedPosition: Int) {
+        for (i in 0 until binding.tabLayout.tabCount) {
+            val tab = binding.tabLayout.getTabAt(i) ?: continue
+            
+            if (i == selectedPosition) {
+                // Apply category-specific color to selected tab icon
+                val categoryColorResId = when (i) {
+                    0 -> R.color.category_trucar      // Blue for Trucar
+                    1 -> R.color.category_encarregar  // Orange for Encarregar
+                    2 -> R.color.category_factures    // Red for Factures
+                    3 -> R.color.category_notes       // Soft tan for Notes
+                    else -> R.color.text_on_primary   // Default white
+                }
+                val color = ContextCompat.getColor(this, categoryColorResId)
+                tab.icon?.setTintList(ColorStateList.valueOf(color))
+            } else {
+                // Unselected tabs remain white
+                val whiteColor = ContextCompat.getColor(this, R.color.text_on_primary)
+                tab.icon?.setTintList(ColorStateList.valueOf(whiteColor))
+            }
         }
     }
     

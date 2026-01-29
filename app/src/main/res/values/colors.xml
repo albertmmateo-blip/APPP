@@ -37,9 +37,18 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     
-    <!-- Category colors -->
+    <!-- Category colors - Primary colors for icons and accents -->
     <color name="category_trucar">#FF2196F3</color>        <!-- Blue 500 -->
-    <color name="category_encarregar">#FF4CAF50</color>    <!-- Green 500 -->
+    <color name="category_encarregar">#FFFF9800</color>    <!-- Orange 500 -->
     <color name="category_factures">#FFF44336</color>      <!-- Red 500 -->
-    <color name="category_notes">#FF9C27B0</color>         <!-- Purple 500 -->
+    <color name="category_notes">#FFD7CCC8</color>         <!-- Soft Tan (Brown 100) -->
+    
+    <!-- Category background colors - Light tints for note card backgrounds -->
+    <color name="category_trucar_bg">#FFE3F2FD</color>     <!-- Light Blue 50 -->
+    <color name="category_encarregar_bg">#FFFFF3E0</color> <!-- Light Orange 50 -->
+    <color name="category_factures_bg">#FFFFEBEE</color>   <!-- Light Red 50 -->
+    <color name="category_notes_bg">#FFEFEBE9</color>      <!-- Light Tan (Brown 50) -->
+    
+    <!-- Entretelas header color - Orange to match new note button -->
+    <color name="entretelas_header">#FFFF9800</color>      <!-- Orange 500 -->
 </resources>
