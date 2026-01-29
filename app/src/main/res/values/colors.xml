@@ -46,12 +46,16 @@
     <color name="category_encarregar">#FFFF9800</color>    <!-- Orange 500 -->
     <color name="category_factures">#FFF44336</color>      <!-- Red 500 -->
     <color name="category_notes">#FF8D6E63</color>         <!-- Brown 400 - Darker tan for better contrast on orange header -->
+    <color name="category_compra">#FFE53935</color>        <!-- Red 600 - For Compra (money out) -->
+    <color name="category_venda">#FF4CAF50</color>         <!-- Green 500 - For Venda (money in) -->
     
     <!-- Category background colors - Light tints for note card backgrounds -->
     <color name="category_trucar_bg">#FFE3F2FD</color>     <!-- Light Blue 50 -->
     <color name="category_encarregar_bg">#FFFFF3E0</color> <!-- Light Orange 50 -->
     <color name="category_factures_bg">#FFFFEBEE</color>   <!-- Light Red 50 -->
     <color name="category_notes_bg">#FFEFEBE9</color>      <!-- Light Tan (Brown 50) -->
+    <color name="category_compra_bg">#FFFFEBEE</color>     <!-- Light Red 50 - For Compra -->
+    <color name="category_venda_bg">#FFE8F5E9</color>      <!-- Light Green 50 - For Venda -->
     
     <!-- Entretelas header color - Orange to match new note button -->
     <color name="entretelas_header">#FFFF9800</color>      <!-- Orange 500 -->

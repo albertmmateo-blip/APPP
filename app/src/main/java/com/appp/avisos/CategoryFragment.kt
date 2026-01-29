@@ -79,6 +79,8 @@ class CategoryFragment : Fragment() {
             mainCategory == "Encarregar" -> viewModel.encarregarNotes
             mainCategory == "Factures" -> viewModel.facturesNotes
             mainCategory == "Notes" -> viewModel.generalNotes
+            mainCategory == "Compra" -> viewModel.compraNotes
+            mainCategory == "Venda" -> viewModel.vendaNotes
             else -> viewModel.trucarNotes // Default fallback
         }
         
