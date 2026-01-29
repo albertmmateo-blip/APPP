@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appp.avisos.adapter.EditHistoryAdapter
 import com.appp.avisos.databinding.ActivityNoteDetailBinding
@@ -101,6 +103,9 @@ class NoteDetailActivity : AppCompatActivity() {
                     } else {
                         binding.layoutUrgentSection.visibility = View.GONE
                     }
+                    
+                    // Set the Edit button color based on category
+                    setCategoryColor(note.category)
                 },
                 onError = { error ->
                     Toast.makeText(this, "Error loading note: $error", Toast.LENGTH_LONG).show()
@@ -146,6 +151,14 @@ class NoteDetailActivity : AppCompatActivity() {
         
         binding.buttonToggleEditHistory.setOnClickListener {
             toggleEditHistory()
+        }
+        
+        binding.buttonFinalitza.setOnClickListener {
+            showFinalizeConfirmationDialog()
+        }
+        
+        binding.buttonEsborra.setOnClickListener {
+            showDeleteConfirmationDialog()
         }
     }
     
@@ -196,5 +209,79 @@ class NoteDetailActivity : AppCompatActivity() {
     private fun formatDate(timestamp: Long): String {
         val instant = Instant.ofEpochMilli(timestamp)
         return dateFormatter.format(instant.atZone(ZoneId.systemDefault()))
+    }
+    
+    /**
+     * Set the Edit button background color based on the category
+     */
+    private fun setCategoryColor(category: String) {
+        val colorResId = when (category) {
+            getString(R.string.category_trucar) -> R.color.category_trucar
+            getString(R.string.category_encarregar) -> R.color.category_encarregar
+            getString(R.string.category_factures) -> R.color.category_factures
+            getString(R.string.category_notes) -> R.color.category_notes
+            else -> R.color.primary
+        }
+        
+        val color = ContextCompat.getColor(this, colorResId)
+        binding.buttonEdit.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
+    }
+    
+    /**
+     * Show confirmation dialog before finalizing a note
+     */
+    private fun showFinalizeConfirmationDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_finalize_title)
+            .setMessage(R.string.dialog_finalize_message)
+            .setPositiveButton(R.string.button_finalize) { _, _ ->
+                finalizeNote()
+            }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
+    }
+    
+    /**
+     * Finalize the note by moving it to the "Finalitzades" recycle bin
+     */
+    private fun finalizeNote() {
+        viewModel.finalizeNote(
+            onSuccess = {
+                Toast.makeText(this, R.string.message_note_finalized, Toast.LENGTH_SHORT).show()
+                finish()
+            },
+            onError = { error ->
+                Toast.makeText(this, "${getString(R.string.error_finalize_failed)}: $error", Toast.LENGTH_LONG).show()
+            }
+        )
+    }
+    
+    /**
+     * Show confirmation dialog before deleting a note
+     */
+    private fun showDeleteConfirmationDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage(R.string.dialog_delete_message)
+            .setPositiveButton(R.string.button_delete) { _, _ ->
+                deleteNote()
+            }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
+    }
+    
+    /**
+     * Delete the note by moving it to the "Esborrades" recycle bin
+     */
+    private fun deleteNote() {
+        viewModel.deleteNote(
+            onSuccess = {
+                Toast.makeText(this, R.string.message_note_deleted, Toast.LENGTH_SHORT).show()
+                finish()
+            },
+            onError = { error ->
+                Toast.makeText(this, "${getString(R.string.error_delete_failed)}: $error", Toast.LENGTH_LONG).show()
+            }
+        )
     }
 }

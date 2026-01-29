@@ -12,6 +12,10 @@
     
     <!-- Content descriptions -->
     <string name="fab_add_note">Add new note</string>
+    <string name="accessibility_button_edit">Edit this note</string>
+    <string name="accessibility_button_back">Go back to the previous screen</string>
+    <string name="accessibility_button_finalitza">Finalize this note</string>
+    <string name="accessibility_button_esborra">Delete this note</string>
     
     <!-- Form labels -->
     <string name="label_note_name">Note Name</string>
@@ -32,6 +36,8 @@
     <string name="button_cancel">CANCEL</string>
     <string name="button_edit">Edita</string>
     <string name="button_back">Back</string>
+    <string name="button_enrere">Enrere</string>
+    <string name="button_esborra">ESBORRA</string>
     <string name="button_restore">RESTAURA</string>
     <string name="button_delete_permanently">ESBORRA DEFINITIVAMENT</string>
     
@@ -56,8 +62,8 @@
     <string name="error_invalid_category">Please select a valid category</string>
     
     <!-- Dialog messages -->
-    <string name="dialog_delete_title">Delete Note?</string>
-    <string name="dialog_delete_message">This action cannot be undone.</string>
+    <string name="dialog_delete_title">Esborrar Nota?</string>
+    <string name="dialog_delete_message">La nota es mourà a Esborrades.</string>
     <string name="dialog_finalize_title">Finalitzar Nota?</string>
     <string name="dialog_finalize_message">La nota es mourà a Finalitzades.</string>
     <string name="dialog_restore_title">Restaurar Nota?</string>

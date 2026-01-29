@@ -209,34 +209,82 @@
 
         </LinearLayout>
 
-        <!-- Action buttons container (horizontal layout) -->
+        <!-- Action buttons container (vertical layout for two rows) -->
         <LinearLayout
             android:id="@+id/layoutActionButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
+            android:orientation="vertical"
             android:layout_marginTop="8dp">
 
-            <!-- Edit button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonEdit"
-                android:layout_width="0dp"
+            <!-- First row: Edita and Enrere buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="@string/button_edit"
-                style="@style/Widget.Material3.Button" />
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="8dp">
 
-            <!-- Back button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonBack"
-                android:layout_width="0dp"
+                <!-- Edit button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/button_edit"
+                    android:contentDescription="@string/accessibility_button_edit"
+                    style="@style/Widget.Material3.Button" />
+
+                <!-- Back button (Enrere) - white with black outline -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonBack"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/button_enrere"
+                    android:contentDescription="@string/accessibility_button_back"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@color/black"
+                    app:strokeColor="@color/black"
+                    app:strokeWidth="2dp"
+                    style="@style/Widget.Material3.Button" />
+
+            </LinearLayout>
+
+            <!-- Second row: Finalitza and Esborra buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="@string/button_back"
-                style="@style/Widget.Material3.Button.TextButton" />
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <!-- Finalitza button (green) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonFinalitza"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/button_finalize"
+                    android:contentDescription="@string/accessibility_button_finalitza"
+                    android:backgroundTint="@color/button_green"
+                    style="@style/Widget.Material3.Button" />
+
+                <!-- Esborra button (red) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonEsborra"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/button_esborra"
+                    android:contentDescription="@string/accessibility_button_esborra"
+                    android:backgroundTint="@color/button_red"
+                    style="@style/Widget.Material3.Button" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
