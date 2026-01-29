@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.appp.avisos.UserSessionManager
 import com.appp.avisos.database.AppDatabase
 import com.appp.avisos.database.Note
 import com.appp.avisos.database.NoteEditHistory
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 class NoteEditorViewModel(application: Application) : AndroidViewModel(application) {
     
     private val repository: NoteRepository
+    private val userSessionManager: UserSessionManager
     
     // LiveData for the currently loaded note
     private val _currentNote = MutableLiveData<Note?>()
@@ -28,6 +30,7 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
         val noteDao = database.noteDao()
         val editHistoryDao = database.noteEditHistoryDao()
         repository = NoteRepository(noteDao, editHistoryDao)
+        userSessionManager = UserSessionManager(application)
     }
     
     /**
@@ -156,6 +159,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
      * Record edit history for changed fields
      */
     private suspend fun recordEditHistory(oldNote: Note, newNote: Note, timestamp: Long) {
+        val currentUser = userSessionManager.getCurrentUser()
+        
         // Track name changes
         if (oldNote.name != newNote.name) {
             repository.insertEditHistory(
@@ -164,7 +169,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     fieldName = "Note Name",
                     oldValue = oldNote.name,
                     newValue = newNote.name,
-                    timestamp = timestamp
+                    timestamp = timestamp,
+                    modifiedBy = currentUser
                 )
             )
         }
@@ -177,7 +183,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     fieldName = "Note Body",
                     oldValue = oldNote.body,
                     newValue = newNote.body,
-                    timestamp = timestamp
+                    timestamp = timestamp,
+                    modifiedBy = currentUser
                 )
             )
         }
@@ -190,7 +197,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     fieldName = "Contact",
                     oldValue = oldNote.contact,
                     newValue = newNote.contact,
-                    timestamp = timestamp
+                    timestamp = timestamp,
+                    modifiedBy = currentUser
                 )
             )
         }
@@ -203,7 +211,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     fieldName = "Category",
                     oldValue = oldNote.category,
                     newValue = newNote.category,
-                    timestamp = timestamp
+                    timestamp = timestamp,
+                    modifiedBy = currentUser
                 )
             )
         }
@@ -216,7 +225,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     fieldName = "Urgent",
                     oldValue = if (oldNote.isUrgent) "Yes" else "No",
                     newValue = if (newNote.isUrgent) "Yes" else "No",
-                    timestamp = timestamp
+                    timestamp = timestamp,
+                    modifiedBy = currentUser
                 )
             )
         }
