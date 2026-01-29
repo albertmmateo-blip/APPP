@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -61,6 +62,14 @@ class MainActivity : AppCompatActivity() {
         
         // Set up the toolbar
         setSupportActionBar(binding.toolbar)
+        
+        // Set up back button handler to return to user selection
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Log out and return to user selection
+                logout()
+            }
+        })
         
         // Set up ViewPager2 with categories
         setupViewPager()
