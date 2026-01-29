@@ -33,7 +33,8 @@
 
         <!-- TabLayout with 4 tabs for categories
              Each tab includes both icon and text label
-             Scrollable for smaller screens -->
+             Scrollable for smaller screens
+             Orange accent colors to match header -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
@@ -41,9 +42,9 @@
             app:tabMode="scrollable"
             app:tabIndicatorHeight="3dp"
             app:tabInlineLabel="false"
-            app:tabSelectedTextColor="@color/secondary"
+            app:tabSelectedTextColor="@color/entretelas_header"
             app:tabTextColor="@color/text_on_primary"
-            app:tabIndicatorColor="@color/secondary" />
+            app:tabIndicatorColor="@color/entretelas_header" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -22,6 +22,9 @@ class MainActivity : AppCompatActivity() {
     
     // Track the currently selected category
     private var currentCategory: String? = null
+    
+    // Track the previously selected tab position for optimization
+    private var previousSelectedPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,9 +84,11 @@ class MainActivity : AppCompatActivity() {
             }
         })
         
-        // Set initial category and icon colors
+        // Set initial category and icon colors (post to ensure tabs are initialized)
         currentCategory = categories[0]
-        updateTabIconColors(0)
+        binding.tabLayout.post {
+            updateTabIconColors(0)
+        }
     }
     
     /**
@@ -128,30 +133,36 @@ class MainActivity : AppCompatActivity() {
     /**
      * Update tab icon colors based on the currently selected tab
      * The selected tab icon gets its category color, while others remain white
+     * Optimized to only update the previously selected and newly selected tabs
      * 
      * @param selectedPosition The position of the currently selected tab
      */
     private fun updateTabIconColors(selectedPosition: Int) {
-        for (i in 0 until binding.tabLayout.tabCount) {
-            val tab = binding.tabLayout.getTabAt(i) ?: continue
-            
-            if (i == selectedPosition) {
-                // Apply category-specific color to selected tab icon
-                val categoryColorResId = when (i) {
-                    0 -> R.color.category_trucar      // Blue for Trucar
-                    1 -> R.color.category_encarregar  // Orange for Encarregar
-                    2 -> R.color.category_factures    // Red for Factures
-                    3 -> R.color.category_notes       // Soft tan for Notes
-                    else -> R.color.text_on_primary   // Default white
-                }
-                val color = ContextCompat.getColor(this, categoryColorResId)
-                tab.icon?.setTintList(ColorStateList.valueOf(color))
-            } else {
-                // Unselected tabs remain white
-                val whiteColor = ContextCompat.getColor(this, R.color.text_on_primary)
-                tab.icon?.setTintList(ColorStateList.valueOf(whiteColor))
-            }
+        // Get white color for unselected tabs
+        val whiteColor = ContextCompat.getColor(this, R.color.text_on_primary)
+        
+        // Reset previous selected tab to white (if different from current)
+        if (previousSelectedPosition != selectedPosition) {
+            val previousTab = binding.tabLayout.getTabAt(previousSelectedPosition)
+            previousTab?.icon?.setTintList(ColorStateList.valueOf(whiteColor))
         }
+        
+        // Apply category-specific color to newly selected tab
+        val currentTab = binding.tabLayout.getTabAt(selectedPosition)
+        if (currentTab != null) {
+            val categoryColorResId = when (selectedPosition) {
+                0 -> R.color.category_trucar      // Blue for Trucar
+                1 -> R.color.category_encarregar  // Orange for Encarregar
+                2 -> R.color.category_factures    // Red for Factures
+                3 -> R.color.category_notes       // Soft tan for Notes
+                else -> R.color.text_on_primary   // Default white
+            }
+            val color = ContextCompat.getColor(this, categoryColorResId)
+            currentTab.icon?.setTintList(ColorStateList.valueOf(color))
+        }
+        
+        // Update previous position tracker
+        previousSelectedPosition = selectedPosition
     }
     
     /**

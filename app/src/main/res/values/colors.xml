@@ -41,7 +41,7 @@
     <color name="category_trucar">#FF2196F3</color>        <!-- Blue 500 -->
     <color name="category_encarregar">#FFFF9800</color>    <!-- Orange 500 -->
     <color name="category_factures">#FFF44336</color>      <!-- Red 500 -->
-    <color name="category_notes">#FFD7CCC8</color>         <!-- Soft Tan (Brown 100) -->
+    <color name="category_notes">#FF8D6E63</color>         <!-- Brown 400 - Darker tan for better contrast on orange header -->
     
     <!-- Category background colors - Light tints for note card backgrounds -->
     <color name="category_trucar_bg">#FFE3F2FD</color>     <!-- Light Blue 50 -->
