@@ -27,7 +27,7 @@ class VendaSubcategoryDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
         
         // Get subcategory from intent
-        subcategory = intent.getStringExtra("subcategory")
+        subcategory = intent.getStringExtra(EXTRA_SUBCATEGORY)
         
         // Set up toolbar
         setSupportActionBar(binding.toolbar)
@@ -108,5 +108,9 @@ class VendaSubcategoryDetailActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
+    }
+    
+    companion object {
+        const val EXTRA_SUBCATEGORY = "subcategory"
     }
 }

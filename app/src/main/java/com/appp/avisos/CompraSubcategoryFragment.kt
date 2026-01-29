@@ -53,7 +53,7 @@ class CompraSubcategoryFragment : Fragment() {
      */
     private fun openSubcategoryDetail(subcategory: String) {
         val intent = Intent(requireContext(), CompraSubcategoryDetailActivity::class.java)
-        intent.putExtra("subcategory", subcategory)
+        intent.putExtra(CompraSubcategoryDetailActivity.EXTRA_SUBCATEGORY, subcategory)
         startActivity(intent)
     }
     
@@ -63,6 +63,8 @@ class CompraSubcategoryFragment : Fragment() {
     }
     
     companion object {
+        const val EXTRA_SUBCATEGORY = "subcategory"
+        
         /**
          * Factory method to create a new instance of CompraSubcategoryFragment
          * @return A new CompraSubcategoryFragment instance
