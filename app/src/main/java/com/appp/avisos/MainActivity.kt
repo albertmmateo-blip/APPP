@@ -18,6 +18,9 @@ class MainActivity : AppCompatActivity() {
     
     // Categories corresponding to tab positions
     private val categories = arrayOf("Trucar", "Encarregar", "Factures", "Notes")
+    
+    // Track the currently selected category
+    private var currentCategory: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,8 +88,8 @@ class MainActivity : AppCompatActivity() {
      */
     private fun setupRecyclerView() {
         notesAdapter = NotesAdapter { note ->
-            // Handle note click - open editor in edit mode
-            openNoteEditor(note)
+            // Handle note click - open detail view in read-only mode
+            openNoteDetail(note)
         }
         binding.recyclerViewNotes.adapter = notesAdapter
     }
@@ -100,6 +103,7 @@ class MainActivity : AppCompatActivity() {
                 tab?.position?.let { position ->
                     // Filter notes by selected category
                     val category = categories[position]
+                    currentCategory = category
                     viewModel.setSelectedCategory(category)
                 }
             }
@@ -119,6 +123,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun setupFab() {
         binding.fabAddNote.setOnClickListener {
+            // Pass current category when creating new note
             openNoteEditor(null)
         }
     }
@@ -152,6 +157,19 @@ class MainActivity : AppCompatActivity() {
     }
     
     /**
+     * Open NoteDetailActivity to view note in read-only mode
+     * 
+     * @param note The note to view
+     */
+    private fun openNoteDetail(note: Note) {
+        val intent = Intent(this, NoteDetailActivity::class.java).apply {
+            putExtra(NoteDetailActivity.EXTRA_NOTE_ID, note.id)
+            putExtra(NoteDetailActivity.EXTRA_CURRENT_CATEGORY, currentCategory)
+        }
+        startActivity(intent)
+    }
+    
+    /**
      * Open NoteEditorActivity to create a new note or edit an existing one
      * 
      * @param note The note to edit, or null to create a new note
@@ -169,6 +187,9 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra(NoteEditorActivity.EXTRA_NOTE_CREATED_DATE, note.createdDate)
             intent.putExtra(NoteEditorActivity.EXTRA_NOTE_MODIFIED_DATE, note.modifiedDate)
         }
+        
+        // Pass current category for new notes
+        intent.putExtra(NoteEditorActivity.EXTRA_CURRENT_CATEGORY, currentCategory)
         
         startActivity(intent)
     }
