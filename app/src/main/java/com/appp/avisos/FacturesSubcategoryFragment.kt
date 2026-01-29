@@ -36,30 +36,38 @@ class FacturesSubcategoryFragment : Fragment() {
      * Set up click listeners for the four subcategory buttons
      */
     private fun setupSubcategoryButtons() {
-        // Passades - Accounted for invoices
+        // Passades and Per passar - Show Compra/Venda selection
         binding.cardPassades.setOnClickListener {
-            openSubcategoryDetail("Passades")
+            openCompraVendaSelection("Passades")
         }
         
-        // Per passar - Yet to be accounted for invoices
         binding.cardPerPassar.setOnClickListener {
-            openSubcategoryDetail("Per passar")
+            openCompraVendaSelection("Per passar")
         }
         
-        // Per pagar - Due invoices
+        // Per pagar and Per cobrar - Show notes directly
         binding.cardPerPagar.setOnClickListener {
             openSubcategoryDetail("Per pagar")
         }
         
-        // Per cobrar - Invoices not yet collected
         binding.cardPerCobrar.setOnClickListener {
             openSubcategoryDetail("Per cobrar")
         }
     }
     
     /**
+     * Open Compra/Venda selection activity for Passades or Per passar
+     * @param parentSubcategory The parent subcategory (Passades or Per passar)
+     */
+    private fun openCompraVendaSelection(parentSubcategory: String) {
+        val intent = Intent(requireContext(), FacturesCompraVendaSelectionActivity::class.java)
+        intent.putExtra(FacturesCompraVendaSelectionActivity.EXTRA_PARENT_SUBCATEGORY, parentSubcategory)
+        startActivity(intent)
+    }
+    
+    /**
      * Open a detail activity showing notes for a specific subcategory
-     * @param subcategory The subcategory name (Passades, Per passar, Per pagar, Per cobrar)
+     * @param subcategory The subcategory name (Per pagar, Per cobrar)
      */
     private fun openSubcategoryDetail(subcategory: String) {
         val intent = Intent(requireContext(), FacturesSubcategoryDetailActivity::class.java)

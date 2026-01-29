@@ -2,13 +2,17 @@ package com.appp.avisos
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.appp.avisos.databinding.ActivityUserSelectionBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
  * Activity for user selection at app startup.
- * Presents a list of users to choose from without requiring authentication.
+ * Presents a list of users to choose from.
+ * Pedro requires password authentication.
  */
 class UserSelectionActivity : AppCompatActivity() {
     
@@ -52,6 +56,55 @@ class UserSelectionActivity : AppCompatActivity() {
      * @param username The selected username
      */
     private fun selectUser(username: String) {
+        // Pedro requires password authentication
+        if (username == "Pedro") {
+            showPedroPasswordDialog()
+        } else {
+            // Other users can login directly
+            proceedToMainActivity(username)
+        }
+    }
+    
+    /**
+     * Show password dialog for Pedro login
+     */
+    private fun showPedroPasswordDialog() {
+        val passwordInput = EditText(this).apply {
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            hint = "Contrasenya"
+        }
+        
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Inici de sessió - Pedro")
+            .setMessage("Si us plau, introdueix la contrasenya:")
+            .setView(passwordInput)
+            .setPositiveButton("Acceptar") { dialog, _ ->
+                val enteredPassword = passwordInput.text.toString()
+                if (sessionManager.validateFacturesPassword(enteredPassword)) {
+                    // Password correct - proceed to login
+                    dialog.dismiss()
+                    proceedToMainActivity("Pedro")
+                } else {
+                    // Password incorrect - show error
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("Error")
+                        .setMessage("Contrasenya incorrecta")
+                        .setPositiveButton("D'acord", null)
+                        .show()
+                }
+            }
+            .setNegativeButton("Cancel·lar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(true)
+            .show()
+    }
+    
+    /**
+     * Proceed to MainActivity after successful login
+     * @param username The username to log in
+     */
+    private fun proceedToMainActivity(username: String) {
         // Save the selected user
         sessionManager.setCurrentUser(username)
         

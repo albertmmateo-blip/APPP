@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sessionManager: UserSessionManager
     
     // Categories corresponding to tab positions
-    private val categories = arrayOf("Trucar", "Encarregar", "Factures", "Notes", "Compra", "Venda")
+    // Only Pedro can see Factures; other users see only Trucar, Encarregar, Notes
+    private lateinit var categories: Array<String>
     
     // Track the currently selected category
     private var currentCategory: String? = null
@@ -46,6 +47,15 @@ class MainActivity : AppCompatActivity() {
             // No user logged in, redirect to user selection
             redirectToUserSelection()
             return
+        }
+        
+        // Set categories based on user
+        // Only Pedro can see Factures
+        val currentUser = sessionManager.getCurrentUser()
+        categories = if (currentUser == "Pedro") {
+            arrayOf("Trucar", "Encarregar", "Factures", "Notes")
+        } else {
+            arrayOf("Trucar", "Encarregar", "Notes")
         }
         
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -74,31 +84,24 @@ class MainActivity : AppCompatActivity() {
         
         // Connect TabLayout with ViewPager2 using TabLayoutMediator
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            // Configure each tab with icon and text
-            when (position) {
-                0 -> {
+            // Configure each tab with icon and text based on category name
+            val categoryName = categories[position]
+            when (categoryName) {
+                "Trucar" -> {
                     tab.setText(R.string.category_trucar)
                     tab.setIcon(R.drawable.ic_phone)
                 }
-                1 -> {
+                "Encarregar" -> {
                     tab.setText(R.string.category_encarregar)
                     tab.setIcon(R.drawable.ic_shopping_cart)
                 }
-                2 -> {
+                "Factures" -> {
                     tab.setText(R.string.category_factures)
                     tab.setIcon(R.drawable.ic_receipt)
                 }
-                3 -> {
+                "Notes" -> {
                     tab.setText(R.string.category_notes)
                     tab.setIcon(R.drawable.ic_note)
-                }
-                4 -> {
-                    tab.setText(R.string.category_compra)
-                    tab.setIcon(R.drawable.ic_wallet_compra)
-                }
-                5 -> {
-                    tab.setText(R.string.category_venda)
-                    tab.setIcon(R.drawable.ic_wallet_venda)
                 }
             }
         }.attach()
@@ -171,28 +174,34 @@ class MainActivity : AppCompatActivity() {
      * Observe note counts and update tab badges
      */
     private fun observeNoteCounts() {
-        viewModel.trucarCount.observe(this) { count ->
-            updateTabBadge(0, count)
+        // Find tab positions by category name
+        val trucarPos = categories.indexOf("Trucar")
+        val encarregarPos = categories.indexOf("Encarregar")
+        val facturesPos = categories.indexOf("Factures")
+        val notesPos = categories.indexOf("Notes")
+        
+        if (trucarPos >= 0) {
+            viewModel.trucarCount.observe(this) { count ->
+                updateTabBadge(trucarPos, count)
+            }
         }
         
-        viewModel.encarregarCount.observe(this) { count ->
-            updateTabBadge(1, count)
+        if (encarregarPos >= 0) {
+            viewModel.encarregarCount.observe(this) { count ->
+                updateTabBadge(encarregarPos, count)
+            }
         }
         
-        viewModel.facturesCount.observe(this) { count ->
-            updateTabBadge(2, count)
+        if (facturesPos >= 0) {
+            viewModel.facturesCount.observe(this) { count ->
+                updateTabBadge(facturesPos, count)
+            }
         }
         
-        viewModel.notesCount.observe(this) { count ->
-            updateTabBadge(3, count)
-        }
-        
-        viewModel.compraCount.observe(this) { count ->
-            updateTabBadge(4, count)
-        }
-        
-        viewModel.vendaCount.observe(this) { count ->
-            updateTabBadge(5, count)
+        if (notesPos >= 0) {
+            viewModel.notesCount.observe(this) { count ->
+                updateTabBadge(notesPos, count)
+            }
         }
     }
     
@@ -233,14 +242,13 @@ class MainActivity : AppCompatActivity() {
         
         // Apply category-specific color to newly selected tab
         val currentTab = binding.tabLayout.getTabAt(selectedPosition)
-        if (currentTab != null) {
-            val categoryColorResId = when (selectedPosition) {
-                0 -> R.color.category_trucar      // Blue for Trucar
-                1 -> R.color.category_encarregar  // Orange for Encarregar
-                2 -> R.color.category_factures    // Red for Factures
-                3 -> R.color.category_notes       // Darker tan for Notes
-                4 -> R.color.category_compra      // Red for Compra
-                5 -> R.color.category_venda       // Green for Venda
+        if (currentTab != null && selectedPosition < categories.size) {
+            val categoryName = categories[selectedPosition]
+            val categoryColorResId = when (categoryName) {
+                "Trucar" -> R.color.category_trucar      // Blue for Trucar
+                "Encarregar" -> R.color.category_encarregar  // Orange for Encarregar
+                "Factures" -> R.color.category_factures    // Red for Factures
+                "Notes" -> R.color.category_notes       // Darker tan for Notes
                 else -> R.color.text_on_primary   // Default white
             }
             val color = ContextCompat.getColor(this, categoryColorResId)

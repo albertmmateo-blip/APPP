@@ -64,6 +64,19 @@ class UserSessionManagerTest {
     }
     
     @Test
+    fun `validateFacturesPassword is case sensitive`() {
+        // When
+        val correctCase = sessionManager.validateFacturesPassword("mixo")
+        val upperCase = sessionManager.validateFacturesPassword("MIXO")
+        val mixedCase = sessionManager.validateFacturesPassword("Mixo")
+        
+        // Then
+        assertTrue("Correct password 'mixo' should be valid", correctCase)
+        assertFalse("Uppercase 'MIXO' should be invalid", upperCase)
+        assertFalse("Mixed case 'Mixo' should be invalid", mixedCase)
+    }
+    
+    @Test
     fun `setFacturesAuthenticated stores authentication status`() {
         // When
         sessionManager.setFacturesAuthenticated(true)
