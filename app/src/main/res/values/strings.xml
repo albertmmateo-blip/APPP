@@ -92,4 +92,14 @@
     <string name="select_user_subtitle">Selecciona qui està utilitzant l\'aplicació</string>
     <string name="label_author">Autor:</string>
     <string name="action_logout">Tancar sessió</string>
+    
+    <!-- Factures Subcategories -->
+    <string name="factures_passades">Passades</string>
+    <string name="factures_passades_desc">Factures comptabilitzades</string>
+    <string name="factures_per_passar">Per passar</string>
+    <string name="factures_per_passar_desc">Per comptabilitzar</string>
+    <string name="factures_per_pagar">Per pagar</string>
+    <string name="factures_per_pagar_desc">Factures pendents de pagament</string>
+    <string name="factures_per_cobrar">Per cobrar</string>
+    <string name="factures_per_cobrar_desc">Factures per cobrar</string>
 </resources>

@@ -94,6 +94,7 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
         body: String,
         contact: String?,
         category: String,
+        subcategory: String? = null,
         isUrgent: Boolean = false,
         author: String? = null,
         onSuccess: () -> Unit,
@@ -118,6 +119,7 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                         body = body.trim(),
                         contact = contact?.trim()?.ifEmpty { null },
                         category = category,
+                        subcategory = subcategory,
                         modifiedDate = currentTime,
                         isUrgent = isUrgent
                     )
@@ -128,6 +130,7 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                         body = body.trim(),
                         contact = contact?.trim()?.ifEmpty { null },
                         category = category,
+                        subcategory = subcategory,
                         createdDate = currentTime,
                         modifiedDate = currentTime,
                         isUrgent = isUrgent,

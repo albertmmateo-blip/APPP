@@ -101,4 +101,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun setSelectedCategory(category: String?) {
         _selectedCategory.value = category
     }
+    
+    /**
+     * Get notes filtered by category and subcategory.
+     * Useful for Factures subcategories (Passades, Per passar, Per pagar, Per cobrar)
+     * 
+     * @param category The main category (e.g., "Factures")
+     * @param subcategory The subcategory (e.g., "Passades")
+     * @return LiveData of notes matching the category and subcategory
+     */
+    fun getNotesByCategoryAndSubcategory(category: String, subcategory: String): LiveData<List<Note>> {
+        return repository.getNotesByCategoryAndSubcategory(category, subcategory)
+    }
 }

@@ -42,6 +42,13 @@ interface NoteDao {
     fun getNotesByCategory(category: String): LiveData<List<Note>>
     
     /**
+     * Get notes filtered by category and subcategory, sorted by urgent flag (urgent first), then modified date descending (newest first)
+     * Excludes notes in recycle bin
+     */
+    @Query("SELECT * FROM notes WHERE category = :category AND subcategory = :subcategory AND is_deleted = 0 ORDER BY is_urgent DESC, modified_date DESC")
+    fun getNotesByCategoryAndSubcategory(category: String, subcategory: String): LiveData<List<Note>>
+    
+    /**
      * Get a single note by its ID
      */
     @Query("SELECT * FROM notes WHERE id = :noteId")

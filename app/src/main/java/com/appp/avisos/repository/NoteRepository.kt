@@ -192,4 +192,16 @@ class NoteRepository(
     fun getNoteCountByCategory(category: String): LiveData<Int> {
         return noteDao.getNoteCountByCategory(category)
     }
+    
+    /**
+     * Get notes filtered by category and subcategory.
+     * Returns LiveData that can be observed by the UI.
+     * 
+     * @param category The main category (e.g., "Factures")
+     * @param subcategory The subcategory (e.g., "Passades", "Per passar", "Per pagar", "Per cobrar")
+     * @return LiveData containing the list of notes matching the category and subcategory
+     */
+    fun getNotesByCategoryAndSubcategory(category: String, subcategory: String): LiveData<List<Note>> {
+        return noteDao.getNotesByCategoryAndSubcategory(category, subcategory)
+    }
 }

@@ -64,12 +64,21 @@ class CategoryFragment : Fragment() {
      * Uses dedicated LiveData streams per category to avoid conflicts with other fragments
      */
     private fun observeNotes() {
-        // Observe the correct LiveData based on the category
-        val notesLiveData = when (category) {
-            "Trucar" -> viewModel.trucarNotes
-            "Encarregar" -> viewModel.encarregarNotes
-            "Factures" -> viewModel.facturesNotes
-            "Notes" -> viewModel.generalNotes
+        // Check if category contains a subcategory (format: "Category|Subcategory")
+        val parts = category?.split("|")
+        val mainCategory = parts?.get(0)
+        val subcategory = if (parts != null && parts.size > 1) parts[1] else null
+        
+        // Observe the correct LiveData based on the category and subcategory
+        val notesLiveData = when {
+            subcategory != null -> {
+                // For subcategory, directly observe from repository
+                viewModel.getNotesByCategoryAndSubcategory(mainCategory ?: "", subcategory)
+            }
+            mainCategory == "Trucar" -> viewModel.trucarNotes
+            mainCategory == "Encarregar" -> viewModel.encarregarNotes
+            mainCategory == "Factures" -> viewModel.facturesNotes
+            mainCategory == "Notes" -> viewModel.generalNotes
             else -> viewModel.trucarNotes // Default fallback
         }
         
@@ -93,9 +102,13 @@ class CategoryFragment : Fragment() {
      * @param note The note to display in the detail view
      */
     private fun openNoteDetail(note: Note) {
+        // Extract main category from category (which might be "Factures|Passades")
+        val parts = category?.split("|")
+        val mainCategory = parts?.get(0) ?: category
+        
         val intent = Intent(requireContext(), NoteDetailActivity::class.java).apply {
             putExtra(NoteDetailActivity.EXTRA_NOTE_ID, note.id)
-            putExtra(NoteDetailActivity.EXTRA_CURRENT_CATEGORY, category)
+            putExtra(NoteDetailActivity.EXTRA_CURRENT_CATEGORY, mainCategory)
         }
         startActivity(intent)
     }
