@@ -33,7 +33,7 @@
     <string name="button_edit">Edita</string>
     <string name="button_back">Back</string>
     <string name="button_enrere">Enrere</string>
-    <string name="button_esborra">Esborra</string>
+    <string name="button_esborra">ESBORRA</string>
     <string name="button_restore">RESTAURA</string>
     <string name="button_delete_permanently">ESBORRA DEFINITIVAMENT</string>
     
@@ -59,7 +59,7 @@
     
     <!-- Dialog messages -->
     <string name="dialog_delete_title">Delete Note?</string>
-    <string name="dialog_delete_message">This action cannot be undone.</string>
+    <string name="dialog_delete_message">La nota es mourà a Esborrades.</string>
     <string name="dialog_finalize_title">Finalitzar Nota?</string>
     <string name="dialog_finalize_message">La nota es mourà a Finalitzades.</string>
     <string name="dialog_restore_title">Restaurar Nota?</string>

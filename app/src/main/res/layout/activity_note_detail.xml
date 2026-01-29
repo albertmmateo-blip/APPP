@@ -247,7 +247,7 @@
                     android:textColor="@color/black"
                     app:strokeColor="@color/black"
                     app:strokeWidth="2dp"
-                    style="@style/Widget.Material3.Button.OutlinedButton" />
+                    style="@style/Widget.Material3.Button" />
 
             </LinearLayout>
 
