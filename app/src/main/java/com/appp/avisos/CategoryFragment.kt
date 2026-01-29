@@ -102,9 +102,13 @@ class CategoryFragment : Fragment() {
      * @param note The note to display in the detail view
      */
     private fun openNoteDetail(note: Note) {
+        // Extract main category from category (which might be "Factures|Passades")
+        val parts = category?.split("|")
+        val mainCategory = parts?.get(0) ?: category
+        
         val intent = Intent(requireContext(), NoteDetailActivity::class.java).apply {
             putExtra(NoteDetailActivity.EXTRA_NOTE_ID, note.id)
-            putExtra(NoteDetailActivity.EXTRA_CURRENT_CATEGORY, category)
+            putExtra(NoteDetailActivity.EXTRA_CURRENT_CATEGORY, mainCategory)
         }
         startActivity(intent)
     }

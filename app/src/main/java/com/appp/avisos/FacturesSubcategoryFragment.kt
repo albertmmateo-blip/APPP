@@ -1,5 +1,6 @@
 package com.appp.avisos
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,26 +11,12 @@ import com.appp.avisos.databinding.FragmentFacturesSubcategoryBinding
 /**
  * Fragment that displays Factures subcategory selection for Pedro user only.
  * Shows 4 large square buttons for: Passades, Per passar, Per pagar, Per cobrar.
- * Non-Pedro users see the regular CategoryFragment instead.
+ * The adapter ensures this fragment is only shown to Pedro.
  */
 class FacturesSubcategoryFragment : Fragment() {
     
     private var _binding: FragmentFacturesSubcategoryBinding? = null
     private val binding get() = _binding!!
-    
-    private lateinit var sessionManager: UserSessionManager
-    
-    // Callback interface for subcategory selection
-    interface OnSubcategorySelectedListener {
-        fun onSubcategorySelected(subcategory: String)
-    }
-    
-    private var listener: OnSubcategorySelectedListener? = null
-    
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sessionManager = UserSessionManager(requireContext())
-    }
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,14 +29,6 @@ class FacturesSubcategoryFragment : Fragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
-        // Check if current user is Pedro
-        if (sessionManager.getCurrentUser() != "Pedro") {
-            // If not Pedro, replace this fragment with regular CategoryFragment
-            replaceWithCategoryFragment()
-            return
-        }
-        
         setupSubcategoryButtons()
     }
     
@@ -59,48 +38,33 @@ class FacturesSubcategoryFragment : Fragment() {
     private fun setupSubcategoryButtons() {
         // Passades - Accounted for invoices
         binding.cardPassades.setOnClickListener {
-            openSubcategory("Passades")
+            openSubcategoryDetail("Passades")
         }
         
         // Per passar - Yet to be accounted for invoices
         binding.cardPerPassar.setOnClickListener {
-            openSubcategory("Per passar")
+            openSubcategoryDetail("Per passar")
         }
         
         // Per pagar - Due invoices
         binding.cardPerPagar.setOnClickListener {
-            openSubcategory("Per pagar")
+            openSubcategoryDetail("Per pagar")
         }
         
         // Per cobrar - Invoices not yet collected
         binding.cardPerCobrar.setOnClickListener {
-            openSubcategory("Per cobrar")
+            openSubcategoryDetail("Per cobrar")
         }
     }
     
     /**
-     * Open a specific subcategory view showing notes for that subcategory
+     * Open a detail activity showing notes for a specific subcategory
      * @param subcategory The subcategory name (Passades, Per passar, Per pagar, Per cobrar)
      */
-    private fun openSubcategory(subcategory: String) {
-        // Replace this fragment with CategoryFragment showing filtered notes
-        val fragment = CategoryFragment.newInstance("Factures|$subcategory")
-        
-        parentFragmentManager.beginTransaction()
-            .replace(id, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-    
-    /**
-     * Replace this fragment with regular CategoryFragment for non-Pedro users
-     */
-    private fun replaceWithCategoryFragment() {
-        val fragment = CategoryFragment.newInstance("Factures")
-        
-        parentFragmentManager.beginTransaction()
-            .replace(id, fragment)
-            .commit()
+    private fun openSubcategoryDetail(subcategory: String) {
+        val intent = Intent(requireContext(), FacturesSubcategoryDetailActivity::class.java)
+        intent.putExtra("subcategory", subcategory)
+        startActivity(intent)
     }
     
     override fun onDestroyView() {

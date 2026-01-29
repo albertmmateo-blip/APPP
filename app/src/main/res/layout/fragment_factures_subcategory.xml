@@ -41,8 +41,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:src="@drawable/ic_factures_passades"
-                android:contentDescription="@string/factures_passades"
-                app:tint="@color/category_factures" />
+                android:contentDescription="@string/factures_passades" />
 
             <TextView
                 android:id="@+id/textPassades"
@@ -95,8 +94,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:src="@drawable/ic_factures_per_passar"
-                android:contentDescription="@string/factures_per_passar"
-                app:tint="@color/category_factures" />
+                android:contentDescription="@string/factures_per_passar" />
 
             <TextView
                 android:id="@+id/textPerPassar"
@@ -150,8 +148,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:src="@drawable/ic_factures_per_pagar"
-                android:contentDescription="@string/factures_per_pagar"
-                app:tint="@color/category_factures" />
+                android:contentDescription="@string/factures_per_pagar" />
 
             <TextView
                 android:id="@+id/textPerPagar"
@@ -204,8 +201,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:src="@drawable/ic_factures_per_cobrar"
-                android:contentDescription="@string/factures_per_cobrar"
-                app:tint="@color/category_factures" />
+                android:contentDescription="@string/factures_per_cobrar" />
 
             <TextView
                 android:id="@+id/textPerCobrar"
