@@ -3,10 +3,8 @@ package com.appp.avisos
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -106,7 +104,7 @@ class MainActivity : AppCompatActivity() {
             }
         }.attach()
         
-        // Add tab selection listener to handle Factures authentication
+        // Add tab selection listener to handle Factures access control
         binding.tabLayout.addOnTabSelectedListener(object : com.google.android.material.tabs.TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: com.google.android.material.tabs.TabLayout.Tab) {
                 val position = tab.position
@@ -117,18 +115,7 @@ class MainActivity : AppCompatActivity() {
                     val currentUser = sessionManager.getCurrentUser()
                     
                     // Only Pedro can access Factures
-                    if (currentUser == "Pedro") {
-                        // Check if already authenticated
-                        if (!sessionManager.isFacturesAuthenticated()) {
-                            // Block the tab change and show password dialog
-                            isHandlingProgrammaticTabChange = true
-                            binding.viewPager.post {
-                                binding.viewPager.setCurrentItem(previousSelectedPosition, false)
-                                isHandlingProgrammaticTabChange = false
-                                showFacturesPasswordDialog(position)
-                            }
-                        }
-                    } else {
+                    if (currentUser != "Pedro") {
                         // Non-Pedro users cannot access Factures at all
                         isHandlingProgrammaticTabChange = true
                         binding.viewPager.post {
@@ -293,51 +280,6 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(NoteEditorActivity.EXTRA_CURRENT_CATEGORY, currentCategory)
         
         startActivity(intent)
-    }
-    
-    /**
-     * Show password dialog for Factures access
-     * @param facturesPosition The position of the Factures tab to navigate to on success
-     */
-    private fun showFacturesPasswordDialog(facturesPosition: Int) {
-        val passwordInput = EditText(this).apply {
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            hint = "Contrasenya"
-        }
-        
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Accés a Factures")
-            .setMessage("Aquesta categoria està restringida. Si us plau, introdueix la contrasenya:")
-            .setView(passwordInput)
-            .setPositiveButton("Acceptar") { dialog, _ ->
-                val enteredPassword = passwordInput.text.toString()
-                if (sessionManager.validateFacturesPassword(enteredPassword)) {
-                    // Password correct - grant access and navigate to Factures
-                    sessionManager.setFacturesAuthenticated(true)
-                    isHandlingProgrammaticTabChange = true
-                    binding.viewPager.post {
-                        binding.viewPager.setCurrentItem(facturesPosition, true)
-                        isHandlingProgrammaticTabChange = false
-                    }
-                } else {
-                    // Password incorrect - show error
-                    MaterialAlertDialogBuilder(this)
-                        .setTitle("Error")
-                        .setMessage("Contrasenya incorrecta")
-                        .setPositiveButton("D'acord", null)
-                        .show()
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel·lar") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setOnCancelListener { dialog ->
-                // Handle back button or outside tap same as cancel button
-                dialog.dismiss()
-            }
-            .setCancelable(true)
-            .show()
     }
     
     /**

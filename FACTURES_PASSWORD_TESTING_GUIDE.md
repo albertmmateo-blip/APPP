@@ -1,81 +1,51 @@
-# Factures Password Authentication - Testing Guide
+# Factures Access Control - Testing Guide
 
 ## Overview
-This document describes how to test the newly implemented password authentication for the Factures category.
+This document describes how to test the access control for the Factures category. Only Pedro can access Factures; no password is required.
 
 ## What Was Implemented
 
 ### Changes Made
-1. **UserSessionManager.kt** - Added password validation and authentication state management:
-   - `validateFacturesPassword(password: String)` - Validates if password equals "mixo"
-   - `isFacturesAuthenticated()` - Checks if user has been authenticated for Factures
-   - `setFacturesAuthenticated(authenticated: Boolean)` - Sets authentication state
-   - Password constant: "mixo"
+1. **UserSessionManager.kt** - Manages user session:
+   - `getCurrentUser()` - Returns the currently logged-in user
+   - `isUserLoggedIn()` - Checks if any user is logged in
+   - Session cleared on logout
 
-2. **MainActivity.kt** - Added password dialog and tab access control:
-   - Tab selection listener intercepts attempts to access Factures tab
-   - Shows password dialog for Pedro when not authenticated
+2. **MainActivity.kt** - Simple access control:
+   - Tab selection listener checks if user is Pedro
    - Shows access denied dialog for non-Pedro users
-   - Programmatic tab change flag to avoid recursive dialog triggers
+   - Pedro can access Factures immediately after login
 
 ### Security Features
-- Password is required only once per session for Pedro
-- Password is cleared on logout
-- Non-Pedro users cannot access Factures at all
-- Password is case-sensitive ("mixo" not "MIXO")
+- Access controlled by logged-in user
+- Only Pedro can view Factures content
+- Non-Pedro users see access denied dialog
 
 ## Manual Testing Steps
 
-### Test 1: Pedro with Correct Password
+### Test 1: Pedro Can Access Factures
 **Steps:**
 1. Launch the app
 2. Select "Pedro" from user selection screen
-3. Try to tap on the "Factures" tab
-4. A password dialog should appear with title "Accés a Factures"
-5. Enter password: "mixo"
-6. Tap "Acceptar"
+3. Tap on the "Factures" tab
 
 **Expected Result:**
-- Dialog closes
-- Factures tab opens showing the 4 subcategory buttons (Passades, Per passar, Per pagar, Per cobrar)
-
-### Test 2: Pedro with Incorrect Password
-**Steps:**
-1. Launch the app
-2. Select "Pedro" from user selection screen
-3. Try to tap on the "Factures" tab
-4. Enter password: "wrong"
-5. Tap "Acceptar"
-
-**Expected Result:**
-- Error dialog appears with message "Contrasenya incorrecta"
-- After dismissing error, user remains on the previous tab (not Factures)
-
-### Test 3: Pedro - Password Remembered During Session
-**Steps:**
-1. Launch the app
-2. Select "Pedro" from user selection screen
-3. Access Factures tab with correct password "mixo"
-4. Navigate to another tab (e.g., "Trucar")
-5. Return to Factures tab
-
-**Expected Result:**
-- No password dialog should appear the second time
 - Factures tab opens immediately
+- Shows the 4 subcategory buttons (Compra, Venda, Compra Subcategories, Venda Subcategories)
+- No password dialog appears
 
-### Test 4: Password Reset on Logout
+### Test 2: Pedro Can Navigate Between Tabs
 **Steps:**
-1. Login as Pedro and authenticate Factures access with password
-2. Access Factures tab successfully
-3. Tap the menu button (three dots)
-4. Select "Logout"
-5. Login as Pedro again
-6. Try to access Factures tab
+1. Login as Pedro
+2. Access Factures tab
+3. Navigate to another tab (e.g., "Trucar")
+4. Return to Factures tab
 
 **Expected Result:**
-- Password dialog should appear again (authentication was cleared)
+- Can access Factures tab repeatedly without any dialogs
+- Navigation works smoothly
 
-### Test 5: Non-Pedro User Cannot Access Factures
+### Test 3: Non-Pedro User Cannot Access Factures
 **Steps:**
 1. Launch the app
 2. Select any user EXCEPT Pedro (e.g., "Isa", "Lourdes", "Alexia", "Albert", or "Joan")
@@ -84,39 +54,34 @@ This document describes how to test the newly implemented password authenticatio
 **Expected Result:**
 - Access denied dialog appears with message "Només l'usuari Pedro té accés a la categoria Factures."
 - User cannot access Factures tab at all
+- User remains on the previous tab
 
-### Test 6: Cancel Password Dialog
+### Test 4: Access Control Persists After Logout
 **Steps:**
-1. Launch the app
-2. Select "Pedro" from user selection screen
-3. Try to tap on the "Factures" tab
-4. Tap "Cancel·lar" button on password dialog
+1. Login as Pedro and access Factures tab successfully
+2. Tap the menu button (three dots)
+3. Select "Logout"
+4. Login as Isa (or another non-Pedro user)
+5. Try to access Factures tab
 
 **Expected Result:**
-- Dialog closes
-- User remains on the previous tab
-- Factures tab is not accessed
+- Access denied dialog appears for non-Pedro user
 
-## Edge Cases to Test
+### Test 5: Pedro Can Still Access After Re-login
+**Steps:**
+1. Login as Pedro
+2. Access Factures successfully
+3. Logout
+4. Login as Pedro again
+5. Try to access Factures tab
 
-### Edge Case 1: Case Sensitivity
-- Password "MIXO" should be rejected
-- Password "Mixo" should be rejected
-- Only "mixo" (lowercase) should work
-
-### Edge Case 2: Empty Password
-- Entering empty string should be rejected
-
-### Edge Case 3: Spaces in Password
-- Password " mixo" (with space) should be rejected
-- Password "mixo " (with space) should be rejected
+**Expected Result:**
+- Can access Factures immediately without any prompts
 
 ## Unit Tests
-Unit tests have been created in `UserSessionManagerTest.kt` to verify:
-- ✅ Correct password validation
-- ✅ Incorrect password rejection
-- ✅ Authentication state management
-- ✅ Logout clears authentication
+Unit tests have been updated in `UserSessionManagerTest.kt` to verify:
+- ✅ User session management
+- ✅ Logout clears session
 - ✅ User validation
 
 To run unit tests:
@@ -124,34 +89,21 @@ To run unit tests:
 ./gradlew test
 ```
 
-## Known Limitations
-1. Password is stored as a constant in the code (not encrypted in a secure storage)
-2. Password is the same across all installations
-3. No password recovery mechanism
-4. No way for admin to change password without code modification
-
 ## UI Text (Catalan)
-- Dialog title: "Accés a Factures"
-- Dialog message: "Aquesta categoria està restringida. Si us plau, introdueix la contrasenya:"
-- Password hint: "Contrasenya"
-- Positive button: "Acceptar"
-- Negative button: "Cancel·lar"
-- Error title: "Error"
-- Error message: "Contrasenya incorrecta"
 - Access denied title: "Accés Denegat"
 - Access denied message: "Només l'usuari Pedro té accés a la categoria Factures."
 
 ## Screenshots to Take During Testing
-1. Password dialog appearance
-2. Successful access to Factures subcategories
-3. Error message for incorrect password
-4. Access denied message for non-Pedro users
+1. Pedro accessing Factures successfully
+2. Access denied message for non-Pedro users
+3. Factures subcategories view (4 buttons)
 
 ## Regression Testing
 After implementing this feature, verify that:
-- [ ] Other tabs (Trucar, Encarregar, Notes) still work normally
-- [ ] Pedro can still create/edit/delete notes in other categories
-- [ ] Other users can still access their categories normally
-- [ ] Logout functionality still works
-- [ ] User switching still works
-- [ ] RecycleBin access still works for all users
+- [x] Other tabs (Trucar, Encarregar, Notes) still work normally
+- [x] Pedro can still create/edit/delete notes in other categories
+- [x] Other users can still access their categories normally
+- [x] Logout functionality still works
+- [x] User switching still works
+- [x] RecycleBin access still works for all users
+- [x] No password prompt appears for Pedro when accessing Factures
