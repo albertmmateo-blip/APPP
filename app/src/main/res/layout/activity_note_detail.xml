@@ -100,6 +100,42 @@
             android:textSize="16sp"
             tools:text="Trucar" />
 
+        <!-- Urgent Section -->
+        <LinearLayout
+            android:id="@+id/layoutUrgentSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/labelUrgent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/label_urgent"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textUrgent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_red_light"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="@string/badge_urgent"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:contentDescription="@string/accessibility_urgent_note" />
+
+        </LinearLayout>
+
         <!-- Created Date Section -->
         <TextView
             android:id="@+id/labelCreatedDate"

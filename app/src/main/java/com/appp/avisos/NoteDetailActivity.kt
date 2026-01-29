@@ -94,6 +94,13 @@ class NoteDetailActivity : AppCompatActivity() {
                     binding.textCategory.text = note.category
                     binding.textCreatedDate.text = formatDate(note.createdDate)
                     binding.textModifiedDate.text = formatDate(note.modifiedDate)
+                    
+                    // Show urgent badge if note is urgent
+                    if (note.isUrgent) {
+                        binding.layoutUrgentSection.visibility = View.VISIBLE
+                    } else {
+                        binding.layoutUrgentSection.visibility = View.GONE
+                    }
                 },
                 onError = { error ->
                     Toast.makeText(this, "Error loading note: $error", Toast.LENGTH_LONG).show()

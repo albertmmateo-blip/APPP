@@ -33,6 +33,7 @@ class NoteEditorActivity : AppCompatActivity() {
         const val EXTRA_NOTE_CATEGORY = "note_category"
         const val EXTRA_NOTE_CREATED_DATE = "note_created_date"
         const val EXTRA_NOTE_MODIFIED_DATE = "note_modified_date"
+        const val EXTRA_NOTE_IS_URGENT = "note_is_urgent"
         const val EXTRA_CURRENT_CATEGORY = "current_category"
     }
     
@@ -90,6 +91,7 @@ class NoteEditorActivity : AppCompatActivity() {
                     binding.editTextNoteName.setText(note.name)
                     binding.editTextNoteBody.setText(note.body)
                     binding.editTextContact.setText(note.contact)
+                    binding.checkBoxUrgent.isChecked = note.isUrgent
                     
                     // Set category in spinner
                     val categoryIndex = categories.indexOf(note.category)
@@ -135,6 +137,7 @@ class NoteEditorActivity : AppCompatActivity() {
         val name = binding.editTextNoteName.text.toString()
         val body = binding.editTextNoteBody.text.toString()
         val contact = binding.editTextContact.text.toString()
+        val isUrgent = binding.checkBoxUrgent.isChecked
         
         // Get category from current context passed via intent
         val currentCategory = intent.getStringExtra(EXTRA_CURRENT_CATEGORY)
@@ -150,6 +153,7 @@ class NoteEditorActivity : AppCompatActivity() {
             body = body,
             contact = contact,
             category = category,
+            isUrgent = isUrgent,
             onSuccess = {
                 Toast.makeText(this, R.string.message_note_saved, Toast.LENGTH_SHORT).show()
                 finish()

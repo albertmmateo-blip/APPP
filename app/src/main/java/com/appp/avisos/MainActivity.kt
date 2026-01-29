@@ -186,6 +186,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra(NoteEditorActivity.EXTRA_NOTE_CATEGORY, note.category)
             intent.putExtra(NoteEditorActivity.EXTRA_NOTE_CREATED_DATE, note.createdDate)
             intent.putExtra(NoteEditorActivity.EXTRA_NOTE_MODIFIED_DATE, note.modifiedDate)
+            intent.putExtra(NoteEditorActivity.EXTRA_NOTE_IS_URGENT, note.isUrgent)
         }
         
         // Pass current category for new notes

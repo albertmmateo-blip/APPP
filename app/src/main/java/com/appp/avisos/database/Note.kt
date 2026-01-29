@@ -26,5 +26,8 @@ data class Note(
     val createdDate: Long,
     
     @ColumnInfo(name = "modified_date")
-    val modifiedDate: Long
+    val modifiedDate: Long,
+    
+    @ColumnInfo(name = "is_urgent", defaultValue = "0")
+    val isUrgent: Boolean = false
 )
