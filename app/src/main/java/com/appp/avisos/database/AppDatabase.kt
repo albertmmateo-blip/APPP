@@ -59,7 +59,6 @@ abstract class AppDatabase : RoomDatabase() {
                     "appp_avisos_db"
                 )
                     .addMigrations(MIGRATION_3_4)
-                    .fallbackToDestructiveMigration() // For development, allows destructive migration
                     .build()
                 
                 INSTANCE = instance

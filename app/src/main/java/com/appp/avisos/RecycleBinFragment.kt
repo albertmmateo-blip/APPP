@@ -125,7 +125,7 @@ class RecycleBinFragment : Fragment() {
             onError = { error ->
                 Toast.makeText(
                     requireContext(),
-                    "Error: $error",
+                    getString(R.string.error_restore_failed) + ": $error",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -167,7 +167,7 @@ class RecycleBinFragment : Fragment() {
             onError = { error ->
                 Toast.makeText(
                     requireContext(),
-                    "Error: $error",
+                    getString(R.string.error_permanent_delete_failed) + ": $error",
                     Toast.LENGTH_LONG
                 ).show()
             }

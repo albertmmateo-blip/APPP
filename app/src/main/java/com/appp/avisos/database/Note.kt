@@ -44,5 +44,9 @@ data class Note(
     companion object {
         const val DELETION_TYPE_ESBORRADES = "Esborrades"
         const val DELETION_TYPE_FINALITZADES = "Finalitzades"
+        
+        // Recycle bin configuration
+        const val RECYCLE_BIN_RETENTION_DAYS = 15
+        const val MILLIS_PER_DAY = 24 * 60 * 60 * 1000L
     }
 }

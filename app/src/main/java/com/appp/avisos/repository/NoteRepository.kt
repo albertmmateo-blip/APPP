@@ -127,12 +127,10 @@ class NoteRepository(
      * 
      * @param daysThreshold Number of days after which notes should be permanently deleted
      */
-    suspend fun cleanupExpiredNotes(daysThreshold: Int = 15) {
-        val thresholdTimestamp = System.currentTimeMillis() - (daysThreshold * 24 * 60 * 60 * 1000L)
-        val expiredNotes = noteDao.getExpiredDeletedNotes(thresholdTimestamp)
-        expiredNotes.forEach { note ->
-            noteDao.permanentlyDeleteNote(note)
-        }
+    suspend fun cleanupExpiredNotes(daysThreshold: Int = Note.RECYCLE_BIN_RETENTION_DAYS) {
+        val thresholdTimestamp = System.currentTimeMillis() - (daysThreshold * Note.MILLIS_PER_DAY)
+        // Use batch delete operation for efficiency
+        noteDao.deleteExpiredNotes(thresholdTimestamp)
     }
     
     /**

@@ -24,8 +24,8 @@ class CleanupExpiredNotesWorker(
             val editHistoryDao = database.noteEditHistoryDao()
             val repository = NoteRepository(noteDao, editHistoryDao)
             
-            // Clean up expired notes (older than 15 days)
-            repository.cleanupExpiredNotes(daysThreshold = 15)
+            // Clean up expired notes (using configured retention period)
+            repository.cleanupExpiredNotes(daysThreshold = Note.RECYCLE_BIN_RETENTION_DAYS)
             
             Result.success()
         } catch (e: Exception) {

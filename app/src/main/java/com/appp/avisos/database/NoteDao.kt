@@ -74,8 +74,15 @@ interface NoteDao {
      * Get notes that have been deleted for more than the specified number of days
      * @param thresholdTimestamp The timestamp before which notes should be considered expired
      */
-    @Query("SELECT * FROM notes WHERE is_deleted = 1 AND deleted_date <= :thresholdTimestamp")
+    @Query("SELECT * FROM notes WHERE is_deleted = 1 AND deleted_date < :thresholdTimestamp")
     suspend fun getExpiredDeletedNotes(thresholdTimestamp: Long): List<Note>
+    
+    /**
+     * Permanently delete all notes that expired before the threshold timestamp (batch operation)
+     * @param thresholdTimestamp The timestamp before which notes should be deleted
+     */
+    @Query("DELETE FROM notes WHERE is_deleted = 1 AND deleted_date < :thresholdTimestamp")
+    suspend fun deleteExpiredNotes(thresholdTimestamp: Long): Int
     
     /**
      * Soft delete a note by marking it as deleted

@@ -237,7 +237,7 @@ class NoteEditorActivity : AppCompatActivity() {
                 finish()
             },
             onError = { error ->
-                Toast.makeText(this, getString(R.string.error_delete_failed) + ": $error", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.error_finalize_failed) + ": $error", Toast.LENGTH_LONG).show()
             }
         )
     }

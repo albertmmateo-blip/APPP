@@ -81,7 +81,7 @@ class RecycleBinViewModel(application: Application) : AndroidViewModel(applicati
     
     /**
      * Clean up expired notes from the recycle bin.
-     * Deletes notes that have been in the recycle bin for more than 15 days.
+     * Deletes notes that have been in the recycle bin for more than the configured retention period.
      * 
      * @param onSuccess Callback invoked on successful cleanup
      * @param onError Callback invoked if cleanup fails
@@ -92,7 +92,7 @@ class RecycleBinViewModel(application: Application) : AndroidViewModel(applicati
     ) {
         viewModelScope.launch {
             try {
-                repository.cleanupExpiredNotes(daysThreshold = 15)
+                repository.cleanupExpiredNotes(daysThreshold = Note.RECYCLE_BIN_RETENTION_DAYS)
                 onSuccess()
             } catch (e: Exception) {
                 onError(e.message ?: "Failed to cleanup expired notes")
