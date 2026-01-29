@@ -97,6 +97,14 @@ class NoteDetailActivity : AppCompatActivity() {
                     binding.textCreatedDate.text = formatDate(note.createdDate)
                     binding.textModifiedDate.text = formatDate(note.modifiedDate)
                     
+                    // Display author if available
+                    if (note.author != null) {
+                        binding.layoutAuthorSection.visibility = View.VISIBLE
+                        binding.textAuthor.text = note.author
+                    } else {
+                        binding.layoutAuthorSection.visibility = View.GONE
+                    }
+                    
                     // Show urgent badge if note is urgent
                     if (note.isUrgent) {
                         binding.layoutUrgentSection.visibility = View.VISIBLE

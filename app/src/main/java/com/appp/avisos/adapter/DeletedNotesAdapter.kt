@@ -56,6 +56,14 @@ class DeletedNotesAdapter(
             val formattedDate = note.deletedDate?.let { formatDate(it) } ?: ""
             binding.textDeletedDate.text = "$deletionLabel $formattedDate"
             
+            // Display author if available
+            if (note.author != null) {
+                binding.textAuthor.visibility = android.view.View.VISIBLE
+                binding.textAuthor.text = "by ${note.author}"
+            } else {
+                binding.textAuthor.visibility = android.view.View.GONE
+            }
+            
             // Set category badge
             binding.chipCategory.text = note.category
             

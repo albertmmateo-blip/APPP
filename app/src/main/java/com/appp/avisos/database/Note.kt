@@ -39,7 +39,10 @@ data class Note(
     val deletedDate: Long? = null,
     
     @ColumnInfo(name = "deletion_type")
-    val deletionType: String? = null  // "Esborrades" or "Finalitzades"
+    val deletionType: String? = null,  // "Esborrades" or "Finalitzades"
+    
+    @ColumnInfo(name = "author")
+    val author: String? = null  // Username of the note creator
 ) {
     companion object {
         const val DELETION_TYPE_ESBORRADES = "Esborrades"

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:padding="24dp"
+    tools:context=".UserSelectionActivity">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_user_title"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnSurface"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp" />
+
+    <!-- Subtitle -->
+    <TextView
+        android:id="@+id/textViewSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_user_subtitle"
+        android:textSize="16sp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- User buttons container -->
+    <LinearLayout
+        android:id="@+id/linearLayoutUsers"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/textViewSubtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.3">
+
+        <!-- Pedro Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonPedro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pedro"
+            android:textSize="18sp"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            style="@style/Widget.Material3.Button.ElevatedButton" />
+
+        <!-- Isa Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonIsa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Isa"
+            android:textSize="18sp"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            style="@style/Widget.Material3.Button.ElevatedButton" />
+
+        <!-- Lourdes Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonLourdes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lourdes"
+            android:textSize="18sp"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            style="@style/Widget.Material3.Button.ElevatedButton" />
+
+        <!-- Alexia Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonAlexia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alexia"
+            android:textSize="18sp"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            style="@style/Widget.Material3.Button.ElevatedButton" />
+
+        <!-- Albert Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonAlbert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Albert"
+            android:textSize="18sp"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            style="@style/Widget.Material3.Button.ElevatedButton" />
+
+        <!-- Joan Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonJoan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Joan"
+            android:textSize="18sp"
+            android:padding="16dp"
+            style="@style/Widget.Material3.Button.ElevatedButton" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

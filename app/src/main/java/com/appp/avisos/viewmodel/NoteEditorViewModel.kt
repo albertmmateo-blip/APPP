@@ -82,6 +82,7 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
      * @param contact Optional contact information
      * @param category The note category
      * @param isUrgent Whether the note is marked as urgent
+     * @param author The username of the note author (for new notes only)
      * @param onSuccess Callback invoked on successful save
      * @param onError Callback invoked if save fails
      */
@@ -91,6 +92,7 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
         contact: String?,
         category: String,
         isUrgent: Boolean = false,
+        author: String? = null,
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
@@ -125,7 +127,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                         category = category,
                         createdDate = currentTime,
                         modifiedDate = currentTime,
-                        isUrgent = isUrgent
+                        isUrgent = isUrgent,
+                        author = author
                     )
                 }
                 
