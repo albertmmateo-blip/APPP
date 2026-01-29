@@ -32,6 +32,8 @@
     <string name="button_cancel">CANCEL</string>
     <string name="button_edit">Edita</string>
     <string name="button_back">Back</string>
+    <string name="button_enrere">Enrere</string>
+    <string name="button_esborra">Esborra</string>
     <string name="button_restore">RESTAURA</string>
     <string name="button_delete_permanently">ESBORRA DEFINITIVAMENT</string>
     
