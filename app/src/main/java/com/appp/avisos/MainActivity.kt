@@ -33,10 +33,7 @@ class MainActivity : AppCompatActivity() {
     private var previousSelectedPosition: Int = 0
     
     // Track if we're programmatically changing tabs (to avoid triggering password dialog)
-    private var isProgrammaticTabChange: Boolean = false
-    
-    // Constant for Factures tab position
-    private val FACTURES_TAB_POSITION = 2
+    private var isHandlingProgrammaticTabChange: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,9 +99,10 @@ class MainActivity : AppCompatActivity() {
         binding.tabLayout.addOnTabSelectedListener(object : com.google.android.material.tabs.TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: com.google.android.material.tabs.TabLayout.Tab) {
                 val position = tab.position
+                val categoryName = categories[position]
                 
                 // Check if user is trying to access Factures tab
-                if (position == FACTURES_TAB_POSITION && !isProgrammaticTabChange) {
+                if (categoryName == "Factures" && !isHandlingProgrammaticTabChange) {
                     val currentUser = sessionManager.getCurrentUser()
                     
                     // Only Pedro can access Factures
@@ -112,17 +110,21 @@ class MainActivity : AppCompatActivity() {
                         // Check if already authenticated
                         if (!sessionManager.isFacturesAuthenticated()) {
                             // Block the tab change and show password dialog
-                            isProgrammaticTabChange = true
-                            binding.viewPager.setCurrentItem(previousSelectedPosition, false)
-                            isProgrammaticTabChange = false
-                            showFacturesPasswordDialog()
+                            isHandlingProgrammaticTabChange = true
+                            binding.viewPager.post {
+                                binding.viewPager.setCurrentItem(previousSelectedPosition, false)
+                                isHandlingProgrammaticTabChange = false
+                                showFacturesPasswordDialog(position)
+                            }
                         }
                     } else {
                         // Non-Pedro users cannot access Factures at all
-                        isProgrammaticTabChange = true
-                        binding.viewPager.setCurrentItem(previousSelectedPosition, false)
-                        isProgrammaticTabChange = false
-                        showAccessDeniedDialog()
+                        isHandlingProgrammaticTabChange = true
+                        binding.viewPager.post {
+                            binding.viewPager.setCurrentItem(previousSelectedPosition, false)
+                            isHandlingProgrammaticTabChange = false
+                            showAccessDeniedDialog()
+                        }
                     }
                 }
             }
@@ -144,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                 updateTabIconColors(position)
                 
                 // Update previous position only if this is not a blocked attempt
-                if (!isProgrammaticTabChange) {
+                if (!isHandlingProgrammaticTabChange) {
                     previousSelectedPosition = position
                 }
             }
@@ -269,8 +271,9 @@ class MainActivity : AppCompatActivity() {
     
     /**
      * Show password dialog for Factures access
+     * @param facturesPosition The position of the Factures tab to navigate to on success
      */
-    private fun showFacturesPasswordDialog() {
+    private fun showFacturesPasswordDialog(facturesPosition: Int) {
         val passwordInput = EditText(this).apply {
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             hint = "Contrasenya"
@@ -285,9 +288,11 @@ class MainActivity : AppCompatActivity() {
                 if (sessionManager.validateFacturesPassword(enteredPassword)) {
                     // Password correct - grant access and navigate to Factures
                     sessionManager.setFacturesAuthenticated(true)
-                    isProgrammaticTabChange = true
-                    binding.viewPager.setCurrentItem(FACTURES_TAB_POSITION, true)
-                    isProgrammaticTabChange = false
+                    isHandlingProgrammaticTabChange = true
+                    binding.viewPager.post {
+                        binding.viewPager.setCurrentItem(facturesPosition, true)
+                        isHandlingProgrammaticTabChange = false
+                    }
                 } else {
                     // Password incorrect - show error
                     MaterialAlertDialogBuilder(this)
@@ -301,7 +306,11 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton("Cancel·lar") { dialog, _ ->
                 dialog.dismiss()
             }
-            .setCancelable(false)
+            .setOnCancelListener { dialog ->
+                // Handle back button or outside tap same as cancel button
+                dialog.dismiss()
+            }
+            .setCancelable(true)
             .show()
     }
     
