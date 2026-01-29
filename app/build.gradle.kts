@@ -58,6 +58,9 @@ dependencies {
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     
+    // ViewPager2 for swipeable categories
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+    
     // ConstraintLayout
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     

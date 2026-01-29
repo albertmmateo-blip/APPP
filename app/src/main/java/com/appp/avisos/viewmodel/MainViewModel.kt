@@ -32,12 +32,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var currentNotesSource: LiveData<List<Note>>? = null
     private var currentCategory: String? = null
     
+    // LiveData for note counts per category (initialized after repository)
+    val trucarCount: LiveData<Int>
+    val encarregarCount: LiveData<Int>
+    val facturesCount: LiveData<Int>
+    val notesCount: LiveData<Int>
+    
+    // LiveData for notes by category (for fragments, initialized after repository)
+    val trucarNotes: LiveData<List<Note>>
+    val encarregarNotes: LiveData<List<Note>>
+    val facturesNotes: LiveData<List<Note>>
+    val generalNotes: LiveData<List<Note>>
+    
     init {
         // Initialize repository with database instance
         val database = AppDatabase.getInstance(application)
         val noteDao = database.noteDao()
         val editHistoryDao = database.noteEditHistoryDao()
         repository = NoteRepository(noteDao, editHistoryDao)
+        
+        // Initialize LiveData properties after repository
+        trucarCount = repository.getNoteCountByCategory("Trucar")
+        encarregarCount = repository.getNoteCountByCategory("Encarregar")
+        facturesCount = repository.getNoteCountByCategory("Factures")
+        notesCount = repository.getNoteCountByCategory("Notes")
+        
+        trucarNotes = repository.getNotesByCategory("Trucar")
+        encarregarNotes = repository.getNotesByCategory("Encarregar")
+        facturesNotes = repository.getNotesByCategory("Factures")
+        generalNotes = repository.getNotesByCategory("Notes")
         
         // Set up MediatorLiveData to react to category changes
         _notes.addSource(_selectedCategory) { category ->

@@ -94,4 +94,15 @@ class NoteRepository(
     suspend fun getEditHistoryCount(noteId: Int): Int {
         return editHistoryDao.getEditHistoryCount(noteId)
     }
+    
+    /**
+     * Get count of notes in a specific category.
+     * Returns LiveData that can be observed by the UI.
+     * 
+     * @param category The category name to count notes for
+     * @return LiveData containing the count of notes in the specified category
+     */
+    fun getNoteCountByCategory(category: String): LiveData<Int> {
+        return noteDao.getNoteCountByCategory(category)
+    }
 }

@@ -2,19 +2,18 @@ package com.appp.avisos
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.appp.avisos.adapter.NotesAdapter
+import com.appp.avisos.adapter.CategoryPagerAdapter
 import com.appp.avisos.database.Note
 import com.appp.avisos.databinding.ActivityMainBinding
 import com.appp.avisos.viewmodel.MainViewModel
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
-    private lateinit var notesAdapter: NotesAdapter
+    private lateinit var pagerAdapter: CategoryPagerAdapter
     
     // Categories corresponding to tab positions
     private val categories = arrayOf("Trucar", "Encarregar", "Factures", "Notes")
@@ -30,92 +29,96 @@ class MainActivity : AppCompatActivity() {
         // Set up the toolbar
         setSupportActionBar(binding.toolbar)
         
-        // Set up tabs with icons and text labels
-        setupTabs()
-        
-        // Set up RecyclerView with adapter
-        setupRecyclerView()
-        
-        // Set up tab selection listener
-        setupTabListener()
+        // Set up ViewPager2 with categories
+        setupViewPager()
         
         // Set up FAB click listener
         setupFab()
         
-        // Observe LiveData from ViewModel
-        observeNotes()
+        // Observe note counts to update badges
+        observeNoteCounts()
     }
     
     /**
-     * Configure TabLayout with 4 category tabs
-     * Each tab includes both an icon and text label
+     * Set up ViewPager2 with TabLayout and category fragments
      */
-    private fun setupTabs() {
-        // Tab 1: Trucar (Call)
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab()
-                .setText(R.string.category_trucar)
-                .setIcon(R.drawable.ic_phone)
-        )
+    private fun setupViewPager() {
+        // Create adapter for ViewPager2
+        pagerAdapter = CategoryPagerAdapter(this, categories)
+        binding.viewPager.adapter = pagerAdapter
         
-        // Tab 2: Encarregar (Order)
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab()
-                .setText(R.string.category_encarregar)
-                .setIcon(R.drawable.ic_shopping_cart)
-        )
-        
-        // Tab 3: Factures (Invoices)
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab()
-                .setText(R.string.category_factures)
-                .setIcon(R.drawable.ic_receipt)
-        )
-        
-        // Tab 4: Notes
-        binding.tabLayout.addTab(
-            binding.tabLayout.newTab()
-                .setText(R.string.category_notes)
-                .setIcon(R.drawable.ic_note)
-        )
-        
-        // Don't select any tab initially - this will show all notes
-        // Tab selection will be handled by user interaction
-    }
-    
-    /**
-     * Set up RecyclerView with NotesAdapter
-     */
-    private fun setupRecyclerView() {
-        notesAdapter = NotesAdapter { note ->
-            // Handle note click - open detail view in read-only mode
-            openNoteDetail(note)
-        }
-        binding.recyclerViewNotes.adapter = notesAdapter
-    }
-    
-    /**
-     * Set up tab selection listener to filter notes by category
-     */
-    private fun setupTabListener() {
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.position?.let { position ->
-                    // Filter notes by selected category
-                    val category = categories[position]
-                    currentCategory = category
-                    viewModel.setSelectedCategory(category)
+        // Connect TabLayout with ViewPager2 using TabLayoutMediator
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            // Configure each tab with icon and text
+            when (position) {
+                0 -> {
+                    tab.setText(R.string.category_trucar)
+                    tab.setIcon(R.drawable.ic_phone)
+                }
+                1 -> {
+                    tab.setText(R.string.category_encarregar)
+                    tab.setIcon(R.drawable.ic_shopping_cart)
+                }
+                2 -> {
+                    tab.setText(R.string.category_factures)
+                    tab.setIcon(R.drawable.ic_receipt)
+                }
+                3 -> {
+                    tab.setText(R.string.category_notes)
+                    tab.setIcon(R.drawable.ic_note)
                 }
             }
-            
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // No action needed
-            }
-            
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                // No action needed
+        }.attach()
+        
+        // Set up page change listener to track current category
+        binding.viewPager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                currentCategory = categories[position]
             }
         })
+        
+        // Set initial category
+        currentCategory = categories[0]
+    }
+    
+    /**
+     * Observe note counts and update tab badges
+     */
+    private fun observeNoteCounts() {
+        viewModel.trucarCount.observe(this) { count ->
+            updateTabBadge(0, count)
+        }
+        
+        viewModel.encarregarCount.observe(this) { count ->
+            updateTabBadge(1, count)
+        }
+        
+        viewModel.facturesCount.observe(this) { count ->
+            updateTabBadge(2, count)
+        }
+        
+        viewModel.notesCount.observe(this) { count ->
+            updateTabBadge(3, count)
+        }
+    }
+    
+    /**
+     * Update badge on a specific tab
+     * 
+     * @param position The tab position (0-3) corresponding to category index
+     * @param count The number to display on the badge; if 0, badge is removed
+     */
+    private fun updateTabBadge(position: Int, count: Int) {
+        val tab = binding.tabLayout.getTabAt(position) ?: return
+        
+        if (count > 0) {
+            val badge = tab.orCreateBadge
+            badge.number = count
+            badge.isVisible = true
+        } else {
+            tab.removeBadge()
+        }
     }
     
     /**
@@ -126,47 +129,6 @@ class MainActivity : AppCompatActivity() {
             // Pass current category when creating new note
             openNoteEditor(null)
         }
-    }
-    
-    /**
-     * Observe notes LiveData from ViewModel and update UI
-     */
-    private fun observeNotes() {
-        viewModel.notes.observe(this) { notes ->
-            // Update adapter with new list
-            notesAdapter.submitList(notes)
-            
-            // Handle empty state
-            handleEmptyState(notes.isEmpty())
-        }
-    }
-    
-    /**
-     * Show or hide empty state message
-     * 
-     * @param isEmpty true if the notes list is empty
-     */
-    private fun handleEmptyState(isEmpty: Boolean) {
-        if (isEmpty) {
-            binding.recyclerViewNotes.visibility = View.GONE
-            // TODO: Show empty state view when implemented
-            // For now, just hide the RecyclerView
-        } else {
-            binding.recyclerViewNotes.visibility = View.VISIBLE
-        }
-    }
-    
-    /**
-     * Open NoteDetailActivity to view note in read-only mode
-     * 
-     * @param note The note to view
-     */
-    private fun openNoteDetail(note: Note) {
-        val intent = Intent(this, NoteDetailActivity::class.java).apply {
-            putExtra(NoteDetailActivity.EXTRA_NOTE_ID, note.id)
-            putExtra(NoteDetailActivity.EXTRA_CURRENT_CATEGORY, currentCategory)
-        }
-        startActivity(intent)
     }
     
     /**
