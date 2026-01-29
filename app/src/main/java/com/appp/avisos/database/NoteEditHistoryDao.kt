@@ -60,11 +60,12 @@ interface NoteEditHistoryDao {
      * Get all distinct edition numbers for a note with their timestamps and users
      * Returns a list of editions ordered by edition number descending (newest first)
      * Groups by edition_number only to ensure one row per edition
+     * Note: All changes within a single edition have the same modified_by value
      */
     @Query("""
         SELECT edition_number, 
                MIN(timestamp) as timestamp, 
-               MAX(modified_by) as modified_by, 
+               MIN(modified_by) as modified_by, 
                note_id, 
                MIN(id) as id, 
                '' as field_name, 
@@ -72,7 +73,7 @@ interface NoteEditHistoryDao {
                '' as new_value
         FROM note_edit_history 
         WHERE note_id = :noteId 
-        GROUP BY edition_number, note_id
+        GROUP BY edition_number
         ORDER BY edition_number DESC
     """)
     fun getEditionsForNote(noteId: Int): LiveData<List<NoteEditHistory>>
