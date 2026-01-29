@@ -18,11 +18,16 @@
     <string name="label_note_body">Note Body</string>
     <string name="label_contact">Contact</string>
     <string name="label_category">Category</string>
+    <string name="label_created_date">Created</string>
+    <string name="label_modified_date">Last Modified</string>
+    <string name="no_contact">No contact information</string>
     
     <!-- Button labels -->
     <string name="button_save">Save</string>
     <string name="button_delete">DELETE</string>
     <string name="button_cancel">CANCEL</string>
+    <string name="button_edit">Edita</string>
+    <string name="button_back">Back</string>
     
     <!-- Validation messages -->
     <string name="error_empty_name">Note name cannot be empty</string>

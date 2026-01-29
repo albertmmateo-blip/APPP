@@ -33,6 +33,7 @@ class NoteEditorActivity : AppCompatActivity() {
         const val EXTRA_NOTE_CATEGORY = "note_category"
         const val EXTRA_NOTE_CREATED_DATE = "note_created_date"
         const val EXTRA_NOTE_MODIFIED_DATE = "note_modified_date"
+        const val EXTRA_CURRENT_CATEGORY = "current_category"
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +43,9 @@ class NoteEditorActivity : AppCompatActivity() {
         
         // Set up category spinner
         setupCategorySpinner()
+        
+        // Hide category selection UI - category will be determined by context
+        hideCategoryField()
         
         // Load note if editing
         loadNoteFromIntent()
@@ -61,6 +65,14 @@ class NoteEditorActivity : AppCompatActivity() {
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerCategory.adapter = adapter
+    }
+    
+    /**
+     * Hide category selection UI since category is determined by context
+     */
+    private fun hideCategoryField() {
+        binding.textViewCategoryLabel.visibility = View.GONE
+        binding.spinnerCategory.visibility = View.GONE
     }
     
     /**
@@ -123,7 +135,10 @@ class NoteEditorActivity : AppCompatActivity() {
         val name = binding.editTextNoteName.text.toString()
         val body = binding.editTextNoteBody.text.toString()
         val contact = binding.editTextContact.text.toString()
-        val category = binding.spinnerCategory.selectedItem.toString()
+        
+        // Get category from current context passed via intent
+        val currentCategory = intent.getStringExtra(EXTRA_CURRENT_CATEGORY)
+        val category = currentCategory ?: "Notes" // Default to "Notes" if no context
         
         // Clear previous errors
         binding.textInputLayoutNoteName.error = null
