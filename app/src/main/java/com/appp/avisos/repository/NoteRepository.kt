@@ -3,13 +3,18 @@ package com.appp.avisos.repository
 import androidx.lifecycle.LiveData
 import com.appp.avisos.database.Note
 import com.appp.avisos.database.NoteDao
+import com.appp.avisos.database.NoteEditHistory
+import com.appp.avisos.database.NoteEditHistoryDao
 
 /**
  * Repository that provides a clean API for data access to the rest of the application.
  * This class abstracts the data sources (in this case, Room database).
  * Room's suspend functions are main-safe and handle threading automatically.
  */
-class NoteRepository(private val noteDao: NoteDao) {
+class NoteRepository(
+    private val noteDao: NoteDao,
+    private val editHistoryDao: NoteEditHistoryDao
+) {
     
     /**
      * Get all notes sorted by modified date (newest first).
@@ -67,5 +72,26 @@ class NoteRepository(private val noteDao: NoteDao) {
      */
     suspend fun getNoteById(noteId: Int): Note? {
         return noteDao.getNoteById(noteId)
+    }
+    
+    /**
+     * Insert a new edit history entry
+     */
+    suspend fun insertEditHistory(history: NoteEditHistory): Long {
+        return editHistoryDao.insertEditHistory(history)
+    }
+    
+    /**
+     * Get edit history for a specific note
+     */
+    fun getEditHistoryForNote(noteId: Int): LiveData<List<NoteEditHistory>> {
+        return editHistoryDao.getEditHistoryForNote(noteId)
+    }
+    
+    /**
+     * Get count of edit history entries for a specific note
+     */
+    suspend fun getEditHistoryCount(noteId: Int): Int {
+        return editHistoryDao.getEditHistoryCount(noteId)
     }
 }

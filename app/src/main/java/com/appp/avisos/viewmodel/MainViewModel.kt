@@ -34,8 +34,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     
     init {
         // Initialize repository with database instance
-        val noteDao = AppDatabase.getInstance(application).noteDao()
-        repository = NoteRepository(noteDao)
+        val database = AppDatabase.getInstance(application)
+        val noteDao = database.noteDao()
+        val editHistoryDao = database.noteEditHistoryDao()
+        repository = NoteRepository(noteDao, editHistoryDao)
         
         // Set up MediatorLiveData to react to category changes
         _notes.addSource(_selectedCategory) { category ->

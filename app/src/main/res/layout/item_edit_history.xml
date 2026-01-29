@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Edit History Item Layout
+     Displays a single edit history entry with field name, old/new values, and timestamp
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Header with field name and timestamp -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/textFieldName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="Note Name" />
+
+            <TextView
+                android:id="@+id/textTimestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="12sp"
+                tools:text="01/01/2024 12:00" />
+
+        </LinearLayout>
+
+        <!-- Old value -->
+        <TextView
+            android:id="@+id/labelOldValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_changed_from"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="11sp"
+            android:layout_marginBottom="2dp" />
+
+        <TextView
+            android:id="@+id/textOldValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="13sp"
+            android:layout_marginBottom="8dp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            tools:text="Original value" />
+
+        <!-- New value -->
+        <TextView
+            android:id="@+id/labelNewValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_changed_to"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="11sp"
+            android:layout_marginBottom="2dp" />
+
+        <TextView
+            android:id="@+id/textNewValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="13sp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            tools:text="New value" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

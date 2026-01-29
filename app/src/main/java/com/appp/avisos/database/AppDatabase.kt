@@ -11,13 +11,18 @@ import androidx.room.RoomDatabase
  * This is a singleton database class that provides access to the Note entity
  * and its corresponding DAO.
  */
-@Database(entities = [Note::class], version = 1, exportSchema = false)
+@Database(entities = [Note::class, NoteEditHistory::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     
     /**
      * Provides access to Note data access object
      */
     abstract fun noteDao(): NoteDao
+    
+    /**
+     * Provides access to Note Edit History data access object
+     */
+    abstract fun noteEditHistoryDao(): NoteEditHistoryDao
     
     companion object {
         // Singleton instance

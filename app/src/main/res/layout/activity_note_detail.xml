@@ -140,6 +140,39 @@
             android:textSize="14sp"
             tools:text="01/01/2024 12:30" />
 
+        <!-- Edit History Section (collapsed by default) -->
+        <LinearLayout
+            android:id="@+id/layoutEditHistorySection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone">
+
+            <!-- Collapsible header button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonToggleEditHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/button_view_edit_history"
+                android:textAlignment="textStart"
+                app:icon="@android:drawable/arrow_down_float"
+                app:iconGravity="end"
+                style="@style/Widget.Material3.Button.TextButton" />
+
+            <!-- Edit History RecyclerView (hidden by default) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewEditHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_edit_history"
+                tools:itemCount="3" />
+
+        </LinearLayout>
+
         <!-- Action buttons container (horizontal layout) -->
         <LinearLayout
             android:id="@+id/layoutActionButtons"
