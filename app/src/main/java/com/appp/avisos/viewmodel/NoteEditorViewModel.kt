@@ -164,6 +164,9 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
     private suspend fun recordEditHistory(oldNote: Note, newNote: Note, timestamp: Long) {
         val currentUser = userSessionManager.getCurrentUser()
         
+        // Get the next edition number for this note
+        val nextEditionNumber = repository.getMaxEditionNumber(oldNote.id) + 1
+        
         // Track name changes
         if (oldNote.name != newNote.name) {
             repository.insertEditHistory(
@@ -173,7 +176,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     oldValue = oldNote.name,
                     newValue = newNote.name,
                     timestamp = timestamp,
-                    modifiedBy = currentUser
+                    modifiedBy = currentUser,
+                    editionNumber = nextEditionNumber
                 )
             )
         }
@@ -187,7 +191,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     oldValue = oldNote.body,
                     newValue = newNote.body,
                     timestamp = timestamp,
-                    modifiedBy = currentUser
+                    modifiedBy = currentUser,
+                    editionNumber = nextEditionNumber
                 )
             )
         }
@@ -201,7 +206,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     oldValue = oldNote.contact,
                     newValue = newNote.contact,
                     timestamp = timestamp,
-                    modifiedBy = currentUser
+                    modifiedBy = currentUser,
+                    editionNumber = nextEditionNumber
                 )
             )
         }
@@ -215,7 +221,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     oldValue = oldNote.category,
                     newValue = newNote.category,
                     timestamp = timestamp,
-                    modifiedBy = currentUser
+                    modifiedBy = currentUser,
+                    editionNumber = nextEditionNumber
                 )
             )
         }
@@ -229,7 +236,8 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
                     oldValue = if (oldNote.isUrgent) "Yes" else "No",
                     newValue = if (newNote.isUrgent) "Yes" else "No",
                     timestamp = timestamp,
-                    modifiedBy = currentUser
+                    modifiedBy = currentUser,
+                    editionNumber = nextEditionNumber
                 )
             )
         }
@@ -299,6 +307,30 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
         val noteId = _currentNote.value?.id
         return if (noteId != null && noteId != 0) {
             repository.getEditHistoryForNote(noteId)
+        } else {
+            null
+        }
+    }
+    
+    /**
+     * Get editions (grouped edit sessions) for the currently loaded note
+     */
+    fun getEditions(): LiveData<List<NoteEditHistory>>? {
+        val noteId = _currentNote.value?.id
+        return if (noteId != null && noteId != 0) {
+            repository.getEditionsForNote(noteId)
+        } else {
+            null
+        }
+    }
+    
+    /**
+     * Get all changes for a specific edition
+     */
+    fun getChangesForEdition(editionNumber: Int): LiveData<List<NoteEditHistory>>? {
+        val noteId = _currentNote.value?.id
+        return if (noteId != null && noteId != 0) {
+            repository.getChangesForEdition(noteId, editionNumber)
         } else {
             null
         }

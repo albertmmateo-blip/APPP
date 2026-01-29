@@ -20,7 +20,7 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index(value = ["note_id"]), Index(value = ["modified_by"])]
+    indices = [Index(value = ["note_id"]), Index(value = ["modified_by"]), Index(value = ["edition_number"])]
 )
 data class NoteEditHistory(
     @PrimaryKey(autoGenerate = true)
@@ -43,5 +43,8 @@ data class NoteEditHistory(
     val timestamp: Long,
     
     @ColumnInfo(name = "modified_by")
-    val modifiedBy: String? = null  // Username of the user who made the change
+    val modifiedBy: String? = null,  // Username of the user who made the change
+    
+    @ColumnInfo(name = "edition_number")
+    val editionNumber: Int = 0  // Groups changes made in the same edit session
 )

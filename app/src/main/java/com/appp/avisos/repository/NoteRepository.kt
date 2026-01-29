@@ -183,6 +183,27 @@ class NoteRepository(
     }
     
     /**
+     * Get the maximum edition number for a specific note
+     */
+    suspend fun getMaxEditionNumber(noteId: Int): Int {
+        return editHistoryDao.getMaxEditionNumber(noteId)
+    }
+    
+    /**
+     * Get all editions for a note (grouped by edition number)
+     */
+    fun getEditionsForNote(noteId: Int): LiveData<List<NoteEditHistory>> {
+        return editHistoryDao.getEditionsForNote(noteId)
+    }
+    
+    /**
+     * Get all changes for a specific edition
+     */
+    fun getChangesForEdition(noteId: Int, editionNumber: Int): LiveData<List<NoteEditHistory>> {
+        return editHistoryDao.getChangesForEdition(noteId, editionNumber)
+    }
+    
+    /**
      * Get count of notes in a specific category.
      * Returns LiveData that can be observed by the UI.
      * 
