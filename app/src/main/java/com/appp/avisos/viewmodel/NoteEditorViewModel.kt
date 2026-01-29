@@ -220,7 +220,7 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
     }
     
     /**
-     * Delete the currently loaded note.
+     * Delete the currently loaded note by moving it to the recycle bin (soft delete).
      * 
      * @param onSuccess Callback invoked on successful deletion
      * @param onError Callback invoked if deletion fails
@@ -237,11 +237,41 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
         
         viewModelScope.launch {
             try {
-                repository.deleteNote(note)
+                // Soft delete - move to recycle bin with type "Esborrades"
+                repository.softDeleteNote(note.id, Note.DELETION_TYPE_ESBORRADES)
                 _currentNote.value = null
                 onSuccess()
             } catch (e: Exception) {
                 onError(e.message ?: "Failed to delete note")
+            }
+        }
+    }
+    
+    /**
+     * Finalize the currently loaded note by moving it to the recycle bin.
+     * Used when a note's tasks are completed.
+     * 
+     * @param onSuccess Callback invoked on successful finalization
+     * @param onError Callback invoked if finalization fails
+     */
+    fun finalizeNote(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val note = _currentNote.value
+        if (note == null) {
+            onError("No note to finalize")
+            return
+        }
+        
+        viewModelScope.launch {
+            try {
+                // Soft delete - move to recycle bin with type "Finalitzades"
+                repository.softDeleteNote(note.id, Note.DELETION_TYPE_FINALITZADES)
+                _currentNote.value = null
+                onSuccess()
+            } catch (e: Exception) {
+                onError(e.message ?: "Failed to finalize note")
             }
         }
     }
