@@ -99,8 +99,8 @@ class NoteEditorActivity : AppCompatActivity() {
                         binding.spinnerCategory.setSelection(categoryIndex)
                     }
                     
-                    // Show delete button for existing notes
-                    binding.buttonDelete.visibility = View.VISIBLE
+                    // Show delete and finalize buttons for existing notes
+                    binding.layoutSecondaryButtons.visibility = View.VISIBLE
                 },
                 onError = { error ->
                     Toast.makeText(this, "Error loading note: $error", Toast.LENGTH_LONG).show()
@@ -108,8 +108,8 @@ class NoteEditorActivity : AppCompatActivity() {
                 }
             )
         } else {
-            // CREATE mode - hide delete button
-            binding.buttonDelete.visibility = View.GONE
+            // CREATE mode - hide delete and finalize buttons
+            binding.layoutSecondaryButtons.visibility = View.GONE
         }
     }
     
@@ -123,6 +123,10 @@ class NoteEditorActivity : AppCompatActivity() {
         
         binding.buttonDelete.setOnClickListener {
             showDeleteConfirmationDialog()
+        }
+        
+        binding.buttonFinalize.setOnClickListener {
+            showFinalizeConfirmationDialog()
         }
         
         binding.buttonCancel.setOnClickListener {
@@ -201,6 +205,35 @@ class NoteEditorActivity : AppCompatActivity() {
         viewModel.deleteNote(
             onSuccess = {
                 Toast.makeText(this, R.string.message_note_deleted, Toast.LENGTH_SHORT).show()
+                finish()
+            },
+            onError = { error ->
+                Toast.makeText(this, getString(R.string.error_delete_failed) + ": $error", Toast.LENGTH_LONG).show()
+            }
+        )
+    }
+    
+    /**
+     * Show confirmation dialog before finalizing note
+     */
+    private fun showFinalizeConfirmationDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.dialog_finalize_title)
+            .setMessage(R.string.dialog_finalize_message)
+            .setPositiveButton(R.string.button_finalize) { _, _ ->
+                finalizeNote()
+            }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
+    }
+    
+    /**
+     * Finalize the current note
+     */
+    private fun finalizeNote() {
+        viewModel.finalizeNote(
+            onSuccess = {
+                Toast.makeText(this, R.string.message_note_finalized, Toast.LENGTH_SHORT).show()
                 finish()
             },
             onError = { error ->

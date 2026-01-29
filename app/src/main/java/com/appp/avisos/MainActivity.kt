@@ -3,6 +3,8 @@ package com.appp.avisos
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -198,6 +200,29 @@ class MainActivity : AppCompatActivity() {
         // Pass current category for new notes
         intent.putExtra(NoteEditorActivity.EXTRA_CURRENT_CATEGORY, currentCategory)
         
+        startActivity(intent)
+    }
+    
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+    
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_recycle_bin -> {
+                openRecycleBin()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+    
+    /**
+     * Open RecycleBinActivity to view deleted notes
+     */
+    private fun openRecycleBin() {
+        val intent = Intent(this, RecycleBinActivity::class.java)
         startActivity(intent)
     }
 }
