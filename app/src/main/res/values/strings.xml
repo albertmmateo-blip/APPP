@@ -86,4 +86,10 @@
     <string name="error_permanent_delete_failed">Error en esborrar la nota definitivament</string>
     <string name="error_load_failed">Failed to load note</string>
     <string name="error_prefix">Error:</string>
+    
+    <!-- User Selection -->
+    <string name="select_user_title">Tria un Usuari</string>
+    <string name="select_user_subtitle">Selecciona qui està utilitzant l\'aplicació</string>
+    <string name="label_author">Autor:</string>
+    <string name="action_logout">Tancar sessió</string>
 </resources>

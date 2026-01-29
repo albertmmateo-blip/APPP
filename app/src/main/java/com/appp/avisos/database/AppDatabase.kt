@@ -13,7 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
  * This is a singleton database class that provides access to the Note entity
  * and its corresponding DAO.
  */
-@Database(entities = [Note::class, NoteEditHistory::class], version = 4, exportSchema = false)
+@Database(entities = [Note::class, NoteEditHistory::class], version = 5, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     
     /**
@@ -44,6 +44,16 @@ abstract class AppDatabase : RoomDatabase() {
         }
         
         /**
+         * Migration from version 4 to 5: Add author field
+         */
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Add author column to notes table
+                db.execSQL("ALTER TABLE notes ADD COLUMN author TEXT")
+            }
+        }
+        
+        /**
          * Gets the singleton instance of AppDatabase.
          * 
          * @param context Application context
@@ -58,7 +68,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "appp_avisos_db"
                 )
-                    .addMigrations(MIGRATION_3_4)
+                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5)
                     .build()
                 
                 INSTANCE = instance

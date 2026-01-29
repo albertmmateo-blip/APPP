@@ -21,6 +21,7 @@ class NoteEditorActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityNoteEditorBinding
     private val viewModel: NoteEditorViewModel by viewModels()
+    private lateinit var sessionManager: UserSessionManager
     
     // Categories for spinner
     private val categories = arrayOf("Trucar", "Encarregar", "Factures", "Notes")
@@ -41,6 +42,9 @@ class NoteEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNoteEditorBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
+        // Initialize session manager
+        sessionManager = UserSessionManager(this)
         
         // Set up category spinner
         setupCategorySpinner()
@@ -93,6 +97,16 @@ class NoteEditorActivity : AppCompatActivity() {
                     binding.editTextContact.setText(note.contact)
                     binding.checkBoxUrgent.isChecked = note.isUrgent
                     
+                    // Display author if available (read-only)
+                    if (note.author != null) {
+                        binding.textViewAuthorLabel.visibility = View.VISIBLE
+                        binding.textViewAuthor.visibility = View.VISIBLE
+                        binding.textViewAuthor.text = note.author
+                    } else {
+                        binding.textViewAuthorLabel.visibility = View.GONE
+                        binding.textViewAuthor.visibility = View.GONE
+                    }
+                    
                     // Set category in spinner
                     val categoryIndex = categories.indexOf(note.category)
                     if (categoryIndex >= 0) {
@@ -108,8 +122,10 @@ class NoteEditorActivity : AppCompatActivity() {
                 }
             )
         } else {
-            // CREATE mode - hide delete and finalize buttons
+            // CREATE mode - hide delete and finalize buttons, and hide author
             binding.layoutSecondaryButtons.visibility = View.GONE
+            binding.textViewAuthorLabel.visibility = View.GONE
+            binding.textViewAuthor.visibility = View.GONE
         }
     }
     
@@ -147,6 +163,9 @@ class NoteEditorActivity : AppCompatActivity() {
         val currentCategory = intent.getStringExtra(EXTRA_CURRENT_CATEGORY)
         val category = currentCategory ?: "Notes" // Default to "Notes" if no context
         
+        // Get current user as author (for new notes only)
+        val author = sessionManager.getCurrentUser()
+        
         // Clear previous errors
         binding.textInputLayoutNoteName.error = null
         binding.textInputLayoutNoteBody.error = null
@@ -158,6 +177,7 @@ class NoteEditorActivity : AppCompatActivity() {
             contact = contact,
             category = category,
             isUrgent = isUrgent,
+            author = author,
             onSuccess = {
                 Toast.makeText(this, R.string.message_note_saved, Toast.LENGTH_SHORT).show()
                 finish()

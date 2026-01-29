@@ -86,6 +86,29 @@
             android:text="@string/label_urgent"
             android:textSize="16sp" />
 
+        <!-- Author label (read-only, only shown in edit mode) -->
+        <TextView
+            android:id="@+id/textViewAuthorLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="@string/label_author"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <!-- Author value (read-only, only shown in edit mode) -->
+        <TextView
+            android:id="@+id/textViewAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="Pedro" />
+
         <!-- Category selection label -->
         <TextView
             android:id="@+id/textViewCategoryLabel"

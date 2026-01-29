@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
     private lateinit var pagerAdapter: CategoryPagerAdapter
+    private lateinit var sessionManager: UserSessionManager
     
     // Categories corresponding to tab positions
     private val categories = arrayOf("Trucar", "Encarregar", "Factures", "Notes")
@@ -30,6 +31,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Initialize session manager
+        sessionManager = UserSessionManager(this)
+        
+        // Check if user is logged in
+        if (!sessionManager.isUserLoggedIn()) {
+            // No user logged in, redirect to user selection
+            redirectToUserSelection()
+            return
+        }
+        
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
@@ -214,8 +226,29 @@ class MainActivity : AppCompatActivity() {
                 openRecycleBin()
                 true
             }
+            R.id.action_logout -> {
+                logout()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+    
+    /**
+     * Redirect to UserSelectionActivity
+     */
+    private fun redirectToUserSelection() {
+        val intent = Intent(this, UserSelectionActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+    
+    /**
+     * Log out the current user and return to user selection
+     */
+    private fun logout() {
+        sessionManager.logout()
+        redirectToUserSelection()
     }
     
     /**
