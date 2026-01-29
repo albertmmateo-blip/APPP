@@ -36,4 +36,10 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    
+    <!-- Category colors -->
+    <color name="category_trucar">#FF2196F3</color>        <!-- Blue 500 -->
+    <color name="category_encarregar">#FF4CAF50</color>    <!-- Green 500 -->
+    <color name="category_factures">#FFF44336</color>      <!-- Red 500 -->
+    <color name="category_notes">#FF9C27B0</color>         <!-- Purple 500 -->
 </resources>

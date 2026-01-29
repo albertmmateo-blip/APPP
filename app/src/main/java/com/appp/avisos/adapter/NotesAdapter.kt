@@ -3,9 +3,11 @@ package com.appp.avisos.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.appp.avisos.R
 import com.appp.avisos.database.Note
 import com.appp.avisos.databinding.ItemNoteBinding
 import java.time.Instant
@@ -53,6 +55,11 @@ class NotesAdapter(
             
             // Set note body preview (ellipsized by layout)
             binding.textNoteBody.text = note.body
+            
+            // Set category color indicator
+            val colorResId = getCategoryColor(note.category)
+            val color = ContextCompat.getColor(binding.root.context, colorResId)
+            binding.categoryColorIndicator.setBackgroundColor(color)
             
             // Handle urgent indicator
             if (note.isUrgent) {
@@ -113,6 +120,22 @@ class NotesAdapter(
          */
         private val dateFormatter: DateTimeFormatter = 
             DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+        
+        /**
+         * Maps category names to their corresponding color resource IDs.
+         * 
+         * @param category The category name (e.g., "Trucar", "Encarregar", "Factures", "Notes")
+         * @return The color resource ID for the category
+         */
+        private fun getCategoryColor(category: String): Int {
+            return when (category) {
+                "Trucar" -> R.color.category_trucar
+                "Encarregar" -> R.color.category_encarregar
+                "Factures" -> R.color.category_factures
+                "Notes" -> R.color.category_notes
+                else -> R.color.primary // Default fallback color
+            }
+        }
     }
 
     /**
