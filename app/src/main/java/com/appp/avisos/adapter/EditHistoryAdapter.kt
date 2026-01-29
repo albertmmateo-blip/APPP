@@ -40,7 +40,15 @@ class EditHistoryAdapter : ListAdapter<NoteEditHistory, EditHistoryAdapter.EditH
             binding.textFieldName.text = history.fieldName
             binding.textOldValue.text = history.oldValue ?: "(empty)"
             binding.textNewValue.text = history.newValue ?: "(empty)"
-            binding.textTimestamp.text = formatDate(history.timestamp)
+            
+            // Format timestamp and include user if available
+            val timestampText = formatDate(history.timestamp)
+            val modifiedBy = history.modifiedBy
+            binding.textTimestamp.text = if (!modifiedBy.isNullOrBlank()) {
+                "$timestampText by $modifiedBy"
+            } else {
+                timestampText
+            }
         }
         
         private fun formatDate(timestamp: Long): String {

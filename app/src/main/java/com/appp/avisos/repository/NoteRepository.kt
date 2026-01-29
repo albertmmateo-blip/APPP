@@ -148,10 +148,38 @@ class NoteRepository(
     }
     
     /**
+     * Get edit history for a specific note filtered by user
+     */
+    fun getEditHistoryForNoteByUser(noteId: Int, username: String): LiveData<List<NoteEditHistory>> {
+        return editHistoryDao.getEditHistoryForNoteByUser(noteId, username)
+    }
+    
+    /**
+     * Get edit history for a specific note within a date range
+     */
+    fun getEditHistoryForNoteDateRange(noteId: Int, startDate: Long, endDate: Long): LiveData<List<NoteEditHistory>> {
+        return editHistoryDao.getEditHistoryForNoteDateRange(noteId, startDate, endDate)
+    }
+    
+    /**
+     * Get edit history for a specific note filtered by user and date range
+     */
+    fun getEditHistoryForNoteByUserAndDateRange(noteId: Int, username: String, startDate: Long, endDate: Long): LiveData<List<NoteEditHistory>> {
+        return editHistoryDao.getEditHistoryForNoteByUserAndDateRange(noteId, username, startDate, endDate)
+    }
+    
+    /**
      * Get count of edit history entries for a specific note
      */
     suspend fun getEditHistoryCount(noteId: Int): Int {
         return editHistoryDao.getEditHistoryCount(noteId)
+    }
+    
+    /**
+     * Get all distinct users who have modified a specific note
+     */
+    suspend fun getDistinctModifiersForNote(noteId: Int): List<String> {
+        return editHistoryDao.getDistinctModifiersForNote(noteId)
     }
     
     /**

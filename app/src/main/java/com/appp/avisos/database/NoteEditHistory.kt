@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 
 /**
  * Entity representing a single edit history entry for a note.
- * Each entry captures what changed, from what value to what value, and when.
+ * Each entry captures what changed, from what value to what value, when, and by whom.
  */
 @Entity(
     tableName = "note_edit_history",
@@ -20,7 +20,7 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index(value = ["note_id"])]
+    indices = [Index(value = ["note_id"]), Index(value = ["modified_by"])]
 )
 data class NoteEditHistory(
     @PrimaryKey(autoGenerate = true)
@@ -40,5 +40,8 @@ data class NoteEditHistory(
     val newValue: String?,
     
     @ColumnInfo(name = "timestamp")
-    val timestamp: Long
+    val timestamp: Long,
+    
+    @ColumnInfo(name = "modified_by")
+    val modifiedBy: String? = null  // Username of the user who made the change
 )
