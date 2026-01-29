@@ -82,6 +82,14 @@ class NotesAdapter(
             
             // Format and display modified date
             binding.textModifiedDate.text = formatDate(note.modifiedDate)
+            
+            // Handle author info
+            if (note.author != null) {
+                binding.textAuthor.visibility = View.VISIBLE
+                binding.textAuthor.text = "by ${note.author}"
+            } else {
+                binding.textAuthor.visibility = View.GONE
+            }
         }
 
         /**

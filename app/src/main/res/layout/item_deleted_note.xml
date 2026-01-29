@@ -68,9 +68,20 @@
             android:id="@+id/textDeletedDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="12sp" />
+
+        <!-- Author info (if available) -->
+        <TextView
+            android:id="@+id/textAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="11sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
 
         <!-- Action buttons row -->
         <LinearLayout
