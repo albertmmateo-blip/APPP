@@ -133,7 +133,7 @@ Detailed manual testing procedures covering:
 2. ✅ **Hardcoded Position Removed**: Now checks by category name instead of position
 3. ✅ **Dialog Cancelable**: Changed from `setCancelable(false)` to `setCancelable(true)` with `onCancelListener`
 4. ✅ **Variable Naming**: Renamed to `isHandlingProgrammaticTabChange` for clarity
-5. ✅ **Mockito Version**: Updated to 5.8.0 (matching core and inline versions)
+5. ✅ **Mockito Version**: Using mockito-core 5.8.0 (inline functionality is now included in core)
 6. ⚠️ **Password in Code**: Acknowledged security concern, acceptable for this use case
 7. 📝 **UI Tests**: Recommended for future enhancement (Espresso tests)
 
