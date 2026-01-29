@@ -23,7 +23,7 @@
     
     <!-- Action button colors -->
     <color name="button_green">#FF4CAF50</color>      <!-- Green 500 - For Finalitza button -->
-    <color name="button_red">#FFF44336</color>        <!-- Red 500 - For Esborra button -->
+    <color name="button_red">#FFE53935</color>        <!-- Red 600 - For Esborra button (darker than category red) -->
     
     <!-- Text colors -->
     <color name="text_primary">#DE000000</color>      <!-- Dark gray (87% opacity) -->

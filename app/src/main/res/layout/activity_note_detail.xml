@@ -233,6 +233,7 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     android:text="@string/button_edit"
+                    android:contentDescription="@string/accessibility_button_edit"
                     style="@style/Widget.Material3.Button" />
 
                 <!-- Back button (Enrere) - white with black outline -->
@@ -243,6 +244,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     android:text="@string/button_enrere"
+                    android:contentDescription="@string/accessibility_button_back"
                     android:backgroundTint="@color/white"
                     android:textColor="@color/black"
                     app:strokeColor="@color/black"
@@ -266,6 +268,7 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     android:text="@string/button_finalize"
+                    android:contentDescription="@string/accessibility_button_finalitza"
                     android:backgroundTint="@color/button_green"
                     style="@style/Widget.Material3.Button" />
 
@@ -277,6 +280,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     android:text="@string/button_esborra"
+                    android:contentDescription="@string/accessibility_button_esborra"
                     android:backgroundTint="@color/button_red"
                     style="@style/Widget.Material3.Button" />
 
