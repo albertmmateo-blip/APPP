@@ -269,4 +269,101 @@ class NoteEditHistoryDaoTest {
         val modifiers = editHistoryDao.getDistinctModifiersForNote(noteId)
         assertEquals(0, modifiers.size)
     }
+    
+    @Test
+    fun getMaxEditionNumber() = runBlocking {
+        // Given - Create a note
+        val note = Note(
+            name = "Test Note",
+            body = "Test Body",
+            category = "Test",
+            createdDate = System.currentTimeMillis(),
+            modifiedDate = System.currentTimeMillis()
+        )
+        val noteId = noteDao.insertNote(note).toInt()
+        
+        // When - No edits exist
+        val maxEditionBefore = editHistoryDao.getMaxEditionNumber(noteId)
+        
+        // Then - Should return 0
+        assertEquals(0, maxEditionBefore)
+        
+        // When - Add editions
+        val timestamp = System.currentTimeMillis()
+        editHistoryDao.insertEditHistory(NoteEditHistory(
+            noteId = noteId,
+            fieldName = "Field1",
+            oldValue = "Old1",
+            newValue = "New1",
+            timestamp = timestamp,
+            modifiedBy = "User1",
+            editionNumber = 1
+        ))
+        editHistoryDao.insertEditHistory(NoteEditHistory(
+            noteId = noteId,
+            fieldName = "Field2",
+            oldValue = "Old2",
+            newValue = "New2",
+            timestamp = timestamp + 1000,
+            modifiedBy = "User1",
+            editionNumber = 2
+        ))
+        
+        // Then - Should return max edition number
+        val maxEditionAfter = editHistoryDao.getMaxEditionNumber(noteId)
+        assertEquals(2, maxEditionAfter)
+    }
+    
+    @Test
+    fun groupEditsByEditionNumber() = runBlocking {
+        // Given - Create a note
+        val note = Note(
+            name = "Test Note",
+            body = "Test Body",
+            category = "Test",
+            createdDate = System.currentTimeMillis(),
+            modifiedDate = System.currentTimeMillis()
+        )
+        val noteId = noteDao.insertNote(note).toInt()
+        
+        // When - Add multiple changes in same edition
+        val timestamp = System.currentTimeMillis()
+        editHistoryDao.insertEditHistory(NoteEditHistory(
+            noteId = noteId,
+            fieldName = "Note Name",
+            oldValue = "Old Name",
+            newValue = "New Name",
+            timestamp = timestamp,
+            modifiedBy = "User1",
+            editionNumber = 1
+        ))
+        editHistoryDao.insertEditHistory(NoteEditHistory(
+            noteId = noteId,
+            fieldName = "Note Body",
+            oldValue = "Old Body",
+            newValue = "New Body",
+            timestamp = timestamp,
+            modifiedBy = "User1",
+            editionNumber = 1
+        ))
+        
+        // And add changes in different edition
+        editHistoryDao.insertEditHistory(NoteEditHistory(
+            noteId = noteId,
+            fieldName = "Contact",
+            oldValue = null,
+            newValue = "John Doe",
+            timestamp = timestamp + 1000,
+            modifiedBy = "User2",
+            editionNumber = 2
+        ))
+        
+        // Then - Verify edition grouping
+        val maxEdition = editHistoryDao.getMaxEditionNumber(noteId)
+        assertEquals(2, maxEdition)
+        
+        val totalCount = editHistoryDao.getEditHistoryCount(noteId)
+        assertEquals(3, totalCount)
+    }
 }
+
