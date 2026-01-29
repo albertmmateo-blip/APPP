@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 /**
  * Room Database for the APPP Avisos application.
@@ -11,7 +13,7 @@ import androidx.room.RoomDatabase
  * This is a singleton database class that provides access to the Note entity
  * and its corresponding DAO.
  */
-@Database(entities = [Note::class, NoteEditHistory::class], version = 3, exportSchema = false)
+@Database(entities = [Note::class, NoteEditHistory::class], version = 4, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     
     /**
@@ -30,6 +32,18 @@ abstract class AppDatabase : RoomDatabase() {
         private var INSTANCE: AppDatabase? = null
         
         /**
+         * Migration from version 3 to 4: Add recycle bin fields
+         */
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Add recycle bin columns to notes table
+                db.execSQL("ALTER TABLE notes ADD COLUMN is_deleted INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE notes ADD COLUMN deleted_date INTEGER")
+                db.execSQL("ALTER TABLE notes ADD COLUMN deletion_type TEXT")
+            }
+        }
+        
+        /**
          * Gets the singleton instance of AppDatabase.
          * 
          * @param context Application context
@@ -44,7 +58,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "appp_avisos_db"
                 )
-                    .fallbackToDestructiveMigration() // For development, allows destructive migration
+                    .addMigrations(MIGRATION_3_4)
                     .build()
                 
                 INSTANCE = instance

@@ -125,17 +125,6 @@
                 android:text="@string/button_save"
                 style="@style/Widget.Material3.Button" />
 
-            <!-- Delete button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonDelete"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:text="@string/button_delete"
-                style="@style/Widget.Material3.Button.OutlinedButton" />
-
             <!-- Cancel button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonCancel"
@@ -145,6 +134,37 @@
                 android:layout_marginStart="4dp"
                 android:text="@string/button_cancel"
                 style="@style/Widget.Material3.Button.TextButton" />
+
+        </LinearLayout>
+
+        <!-- Secondary action buttons (Delete and Finalize) -->
+        <LinearLayout
+            android:id="@+id/layoutSecondaryButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="8dp">
+
+            <!-- Delete button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonDelete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="@string/button_delete"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
+
+            <!-- Finalize button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonFinalize"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="@string/button_finalize"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
 
         </LinearLayout>
 

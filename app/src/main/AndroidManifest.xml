@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".ApppAvisosApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -27,6 +28,10 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".NoteEditorActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".RecycleBinActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
     </application>

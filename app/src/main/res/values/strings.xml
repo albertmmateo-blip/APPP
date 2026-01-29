@@ -28,9 +28,21 @@
     <!-- Button labels -->
     <string name="button_save">Save</string>
     <string name="button_delete">DELETE</string>
+    <string name="button_finalize">FINALITZA</string>
     <string name="button_cancel">CANCEL</string>
     <string name="button_edit">Edita</string>
     <string name="button_back">Back</string>
+    <string name="button_restore">RESTAURA</string>
+    <string name="button_delete_permanently">ESBORRA DEFINITIVAMENT</string>
+    
+    <!-- Recycle Bin labels -->
+    <string name="recycle_bin_title">Paperera de reciclatge</string>
+    <string name="tab_esborrades">Esborrades</string>
+    <string name="tab_finalitzades">Finalitzades</string>
+    <string name="deleted_on">Esborrat el:</string>
+    <string name="finalized_on">Finalitzat el:</string>
+    <string name="empty_recycle_bin">La paperera està buida</string>
+    <string name="empty_recycle_bin_message">Les notes esborrades apareixeran aquí</string>
     
     <!-- Edit History labels -->
     <string name="button_view_edit_history">View edit history</string>
@@ -46,13 +58,26 @@
     <!-- Dialog messages -->
     <string name="dialog_delete_title">Delete Note?</string>
     <string name="dialog_delete_message">This action cannot be undone.</string>
+    <string name="dialog_finalize_title">Finalitzar Nota?</string>
+    <string name="dialog_finalize_message">La nota es mourà a Finalitzades.</string>
+    <string name="dialog_restore_title">Restaurar Nota?</string>
+    <string name="dialog_restore_message">La nota tornarà a les notes actives.</string>
+    <string name="dialog_permanent_delete_title">Esborrar Definitivament?</string>
+    <string name="dialog_permanent_delete_message">Aquesta acció no es pot desfer.</string>
     
     <!-- Success messages -->
     <string name="message_note_saved">Note saved successfully</string>
     <string name="message_note_deleted">Note deleted successfully</string>
+    <string name="message_note_finalized">Nota finalitzada correctament</string>
+    <string name="message_note_restored">Nota restaurada correctament</string>
+    <string name="message_note_deleted_permanently">Nota esborrada definitivament</string>
     
     <!-- Error messages -->
     <string name="error_save_failed">Failed to save note</string>
     <string name="error_delete_failed">Failed to delete note</string>
+    <string name="error_finalize_failed">Error en finalitzar la nota</string>
+    <string name="error_restore_failed">Error en restaurar la nota</string>
+    <string name="error_permanent_delete_failed">Error en esborrar la nota definitivament</string>
     <string name="error_load_failed">Failed to load note</string>
+    <string name="error_prefix">Error:</string>
 </resources>

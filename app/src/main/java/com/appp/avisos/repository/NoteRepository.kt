@@ -74,6 +74,65 @@ class NoteRepository(
         return noteDao.getNoteById(noteId)
     }
     
+    // Recycle Bin operations
+    
+    /**
+     * Soft delete a note by moving it to the recycle bin
+     * 
+     * @param noteId The ID of the note to delete
+     * @param deletionType The type of deletion (Esborrades or Finalitzades)
+     */
+    suspend fun softDeleteNote(noteId: Int, deletionType: String) {
+        val deletedDate = System.currentTimeMillis()
+        noteDao.softDeleteNote(noteId, deletedDate, deletionType)
+    }
+    
+    /**
+     * Get all deleted notes
+     */
+    fun getDeletedNotes(): LiveData<List<Note>> {
+        return noteDao.getDeletedNotes()
+    }
+    
+    /**
+     * Get deleted notes filtered by type
+     * 
+     * @param type The deletion type (Esborrades or Finalitzades)
+     */
+    fun getDeletedNotesByType(type: String): LiveData<List<Note>> {
+        return noteDao.getDeletedNotesByType(type)
+    }
+    
+    /**
+     * Restore a note from the recycle bin
+     * 
+     * @param noteId The ID of the note to restore
+     */
+    suspend fun restoreNote(noteId: Int) {
+        noteDao.restoreNote(noteId)
+    }
+    
+    /**
+     * Permanently delete a note (hard delete)
+     * 
+     * @param note The note to permanently delete
+     */
+    suspend fun permanentlyDeleteNote(note: Note) {
+        // Delete edit history first
+        noteDao.permanentlyDeleteNote(note)
+    }
+    
+    /**
+     * Clean up notes that have been in the recycle bin for more than the specified days
+     * 
+     * @param daysThreshold Number of days after which notes should be permanently deleted
+     */
+    suspend fun cleanupExpiredNotes(daysThreshold: Int = Note.RECYCLE_BIN_RETENTION_DAYS) {
+        val thresholdTimestamp = System.currentTimeMillis() - (daysThreshold * Note.MILLIS_PER_DAY)
+        // Use batch delete operation for efficiency
+        noteDao.deleteExpiredNotes(thresholdTimestamp)
+    }
+    
     /**
      * Insert a new edit history entry
      */
