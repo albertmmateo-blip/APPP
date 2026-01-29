@@ -66,8 +66,8 @@ class MainActivity : AppCompatActivity() {
         // Set up back button handler to return to user selection
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                // Return to user selection instead of closing the app
-                redirectToUserSelection()
+                // Log out and return to user selection
+                logout()
             }
         })
         
