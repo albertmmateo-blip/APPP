@@ -2,6 +2,8 @@ package com.appp.avisos
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -17,6 +19,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 /**
  * Integration tests for NoteEditHistoryDao
@@ -45,6 +49,36 @@ class NoteEditHistoryDaoTest {
     fun teardown() {
         database.close()
     }
+    
+    /**
+     * Helper function to get value from LiveData synchronously for testing
+     */
+    private fun <T> LiveData<T>.getOrAwaitValue(
+        time: Long = 2,
+        timeUnit: TimeUnit = TimeUnit.SECONDS
+    ): T {
+        var data: T? = null
+        val latch = CountDownLatch(1)
+        val observer = object : Observer<T> {
+            override fun onChanged(value: T) {
+                data = value
+                latch.countDown()
+                this@getOrAwaitValue.removeObserver(this)
+            }
+        }
+        this.observeForever(observer)
+        
+        // Wait for LiveData to emit a value
+        if (!latch.await(time, timeUnit)) {
+            this.removeObserver(observer)
+            throw TimeoutException("LiveData value was never set.")
+        }
+        
+        @Suppress("UNCHECKED_CAST")
+        return data as T
+    }
+    
+    class TimeoutException(message: String) : Exception(message)
     
     @Test
     fun insertAndRetrieveEditHistory() = runBlocking {
@@ -364,6 +398,92 @@ class NoteEditHistoryDaoTest {
         
         val totalCount = editHistoryDao.getEditHistoryCount(noteId)
         assertEquals(3, totalCount)
+    }
+    
+    @Test
+    fun getEditionsForNote_returnsOneRowPerEdition() = runBlocking {
+        // Given - Create a note
+        val note = Note(
+            name = "Test Note",
+            body = "Test Body",
+            category = "Test",
+            createdDate = System.currentTimeMillis(),
+            modifiedDate = System.currentTimeMillis()
+        )
+        val noteId = noteDao.insertNote(note).toInt()
+        
+        // When - Add multiple changes in same edition (edition 1)
+        val timestamp = System.currentTimeMillis()
+        editHistoryDao.insertEditHistory(NoteEditHistory(
+            noteId = noteId,
+            fieldName = "Note Name",
+            oldValue = "Old Name",
+            newValue = "New Name",
+            timestamp = timestamp,
+            modifiedBy = "User1",
+            editionNumber = 1
+        ))
+        editHistoryDao.insertEditHistory(NoteEditHistory(
+            noteId = noteId,
+            fieldName = "Note Body",
+            oldValue = "Old Body",
+            newValue = "New Body",
+            timestamp = timestamp + 10, // Slightly different timestamp
+            modifiedBy = "User1",
+            editionNumber = 1
+        ))
+        editHistoryDao.insertEditHistory(NoteEditHistory(
+            noteId = noteId,
+            fieldName = "Contact",
+            oldValue = null,
+            newValue = "John Smith",
+            timestamp = timestamp + 20, // Another timestamp
+            modifiedBy = "User1",
+            editionNumber = 1
+        ))
+        
+        // And add changes in a different edition (edition 2)
+        editHistoryDao.insertEditHistory(NoteEditHistory(
+            noteId = noteId,
+            fieldName = "Note Name",
+            oldValue = "New Name",
+            newValue = "Updated Name",
+            timestamp = timestamp + 1000,
+            modifiedBy = "User2",
+            editionNumber = 2
+        ))
+        editHistoryDao.insertEditHistory(NoteEditHistory(
+            noteId = noteId,
+            fieldName = "Category",
+            oldValue = "Test",
+            newValue = "Updated",
+            timestamp = timestamp + 1010,
+            modifiedBy = "User2",
+            editionNumber = 2
+        ))
+        
+        // Then - getEditionsForNote should return exactly 2 rows (one per edition)
+        // even though we have 5 total changes
+        val totalCount = editHistoryDao.getEditHistoryCount(noteId)
+        assertEquals(5, totalCount)
+        
+        // Get editions using the helper function for reliable LiveData testing
+        val editionsList = editHistoryDao.getEditionsForNote(noteId).getOrAwaitValue()
+        
+        // Verify we got exactly 2 edition rows (not 5)
+        assertEquals(2, editionsList.size)
+        
+        // Verify the editions are returned in descending order (newest first)
+        assertEquals(2, editionsList[0].editionNumber)
+        assertEquals(1, editionsList[1].editionNumber)
+        
+        // Verify the edition for User1 has the earliest timestamp from that edition
+        assertEquals(timestamp, editionsList[1].timestamp)
+        assertEquals("User1", editionsList[1].modifiedBy)
+        
+        // Verify the edition for User2
+        assertEquals(timestamp + 1000, editionsList[0].timestamp)
+        assertEquals("User2", editionsList[0].modifiedBy)
     }
 }
 

@@ -15,6 +15,7 @@ class UserSessionManager(context: Context) {
     companion object {
         private const val PREFS_NAME = "user_session_prefs"
         private const val KEY_CURRENT_USER = "current_user"
+        private const val FACTURES_PASSWORD = "mixo"
         
         // List of available users
         val AVAILABLE_USERS = listOf(
@@ -64,5 +65,14 @@ class UserSessionManager(context: Context) {
         sharedPreferences.edit()
             .remove(KEY_CURRENT_USER)
             .apply()
+    }
+    
+    /**
+     * Validate the Factures password
+     * @param password The password to validate
+     * @return true if the password is correct, false otherwise
+     */
+    fun validateFacturesPassword(password: String): Boolean {
+        return password == FACTURES_PASSWORD
     }
 }
