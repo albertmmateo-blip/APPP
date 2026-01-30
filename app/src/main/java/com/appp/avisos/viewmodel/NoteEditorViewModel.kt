@@ -184,12 +184,15 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
         
         // Track body changes
         if (oldNote.body != newNote.body) {
+            // For body field, store character count instead of full text to prevent database bloat
+            val oldLength = oldNote.body.length
+            val newLength = newNote.body.length
             repository.insertEditHistory(
                 NoteEditHistory(
                     noteId = oldNote.id,
                     fieldName = "Note Body",
-                    oldValue = oldNote.body,
-                    newValue = newNote.body,
+                    oldValue = "$oldLength characters",
+                    newValue = "$newLength characters",
                     timestamp = timestamp,
                     modifiedBy = currentUser,
                     editionNumber = nextEditionNumber
