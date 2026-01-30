@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.appp.avisos.R
 import com.appp.avisos.UserSessionManager
 import com.appp.avisos.database.AppDatabase
 import com.appp.avisos.database.Note
@@ -187,12 +188,13 @@ class NoteEditorViewModel(application: Application) : AndroidViewModel(applicati
             // For body field, store character count instead of full text to prevent database bloat
             val oldLength = oldNote.body.length
             val newLength = newNote.body.length
+            val context = getApplication<Application>()
             repository.insertEditHistory(
                 NoteEditHistory(
                     noteId = oldNote.id,
                     fieldName = "Note Body",
-                    oldValue = "$oldLength characters",
-                    newValue = "$newLength characters",
+                    oldValue = context.getString(R.string.edit_history_character_count, oldLength),
+                    newValue = context.getString(R.string.edit_history_character_count, newLength),
                     timestamp = timestamp,
                     modifiedBy = currentUser,
                     editionNumber = nextEditionNumber

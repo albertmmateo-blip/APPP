@@ -58,6 +58,7 @@
     <string name="button_hide_edit_history">Hide edit history</string>
     <string name="label_changed_from">Changed from:</string>
     <string name="label_changed_to">To:</string>
+    <string name="edit_history_character_count">%d characters</string>
     <string name="edition_title_format">Edició #%1$d per %2$s a les %3$s</string>
     <string name="edition_title_no_user_format">Edició #%1$d a les %2$s</string>
     <string name="button_view_changes">View changes</string>
