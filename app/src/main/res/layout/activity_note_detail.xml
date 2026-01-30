@@ -167,44 +167,70 @@
         </LinearLayout>
 
         <!-- Created Date Section -->
-        <TextView
-            android:id="@+id/labelCreatedDate"
+        <LinearLayout
+            android:id="@+id/layoutCreatedDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:text="@string/label_created_date"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textCreatedDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginBottom="16dp"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="14sp"
-            tools:text="01/01/2024 12:00" />
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+            <TextView
+                android:id="@+id/labelCreatedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/label_created_date"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textCreatedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                tools:text="01/01/2024 12:00" />
+
+        </LinearLayout>
 
         <!-- Modified Date Section -->
-        <TextView
-            android:id="@+id/labelModifiedDate"
+        <LinearLayout
+            android:id="@+id/layoutModifiedDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:text="@string/label_modified_date"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textModifiedDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginBottom="24dp"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="14sp"
-            tools:text="01/01/2024 12:30" />
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+            <TextView
+                android:id="@+id/labelModifiedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/label_modified_date"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textModifiedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                tools:text="01/01/2024 12:30" />
+
+        </LinearLayout>
 
         <!-- Edit History Section (collapsed by default) -->
         <LinearLayout

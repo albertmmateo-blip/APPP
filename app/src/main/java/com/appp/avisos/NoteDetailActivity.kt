@@ -170,6 +170,16 @@ class NoteDetailActivity : AppCompatActivity() {
             toggleEditHistory()
         }
         
+        // Make Created Date section clickable to toggle edit history
+        binding.layoutCreatedDate.setOnClickListener {
+            toggleEditHistory()
+        }
+        
+        // Make Modified Date section clickable to toggle edit history
+        binding.layoutModifiedDate.setOnClickListener {
+            toggleEditHistory()
+        }
+        
         binding.buttonFinalitza.setOnClickListener {
             showFinalizeConfirmationDialog()
         }
