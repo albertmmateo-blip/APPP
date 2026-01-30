@@ -146,9 +146,15 @@ class NoteDetailActivity : AppCompatActivity() {
                     // Show edit history section only if there are editions
                     binding.layoutEditHistorySection.visibility = View.VISIBLE
                     editionHistoryAdapter.submitList(editionsList)
+                    
+                    // Enable clickable date sections when edit history is available
+                    enableDateSectionClicks()
                 } else {
                     // Hide edit history section if no edits
                     binding.layoutEditHistorySection.visibility = View.GONE
+                    
+                    // Disable clickable date sections when no edit history
+                    disableDateSectionClicks()
                 }
             }
         }
@@ -177,6 +183,36 @@ class NoteDetailActivity : AppCompatActivity() {
         binding.buttonEsborra.setOnClickListener {
             showDeleteConfirmationDialog()
         }
+    }
+    
+    /**
+     * Enable the date sections to be clickable for toggling edit history
+     */
+    private fun enableDateSectionClicks() {
+        binding.layoutCreatedDate.isClickable = true
+        binding.layoutCreatedDate.isFocusable = true
+        binding.layoutCreatedDate.setOnClickListener {
+            toggleEditHistory()
+        }
+        
+        binding.layoutModifiedDate.isClickable = true
+        binding.layoutModifiedDate.isFocusable = true
+        binding.layoutModifiedDate.setOnClickListener {
+            toggleEditHistory()
+        }
+    }
+    
+    /**
+     * Disable the date sections from being clickable
+     */
+    private fun disableDateSectionClicks() {
+        binding.layoutCreatedDate.isClickable = false
+        binding.layoutCreatedDate.isFocusable = false
+        binding.layoutCreatedDate.setOnClickListener(null)
+        
+        binding.layoutModifiedDate.isClickable = false
+        binding.layoutModifiedDate.isFocusable = false
+        binding.layoutModifiedDate.setOnClickListener(null)
     }
     
     /**
