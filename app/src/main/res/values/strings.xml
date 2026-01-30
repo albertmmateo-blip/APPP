@@ -18,6 +18,7 @@
     <string name="accessibility_button_back">Go back to the previous screen</string>
     <string name="accessibility_button_finalitza">Finalize this note</string>
     <string name="accessibility_button_esborra">Delete this note</string>
+    <string name="accessibility_tap_to_view_edit_history">Tap to view edit history</string>
     
     <!-- Form labels -->
     <string name="label_note_name">Note Name</string>
